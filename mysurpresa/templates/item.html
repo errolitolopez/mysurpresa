@@ -89,7 +89,10 @@
         <div class="d-flex justify-content-center flex-wrap gap-3">
           {# A sold item can't be bought, so there is nothing to ask. #}
           {% if shop.messenger_username and item.status != 'sold' %}
-            <a class="btn btn-link px-0 bi bi-messenger" target="_blank" rel="noopener"
+            {# Messenger doesn't always type the message in for the buyer (only for Facebook Pages), so
+               item.js also copies it: the buyer pastes it in the chat and the item details always arrive. #}
+            <a class="btn btn-link px-0 bi bi-messenger" id="message-link" target="_blank" rel="noopener"
+               data-message="{{ message }}"
                href="https://m.me/{{ shop.messenger_username }}?text={{ message|urlencode }}">Message us</a>
           {% endif %}
           {# "Share" opens the phone's share sheet; where there is none (most computers)
@@ -108,6 +111,16 @@
       </div>
     </div>
   </article>
+
+  {# A short note at the bottom of the screen, e.g. after Message us: "Message copied. Paste it in the chat." #}
+  <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+    <div id="note" class="toast align-items-center" role="status" aria-live="polite" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="note-text"></div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
 
   {% if session.get('admin') %}
     <p class="text-center mt-3">

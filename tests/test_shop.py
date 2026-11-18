@@ -36,6 +36,8 @@ def test_item_page_has_messenger_button_and_preview_tags(client, anonymous):
     page = anonymous.get(f"/item/{item['id']}").get_data(as_text=True)
     assert "https://m.me/mysurpresa.shop?text=Hi%21" in page
     assert "Nike%20shoes" in page
+    # The same message is also copied when tapped (Messenger only types it in for Pages)
+    assert 'data-message="Hi! Available pa po ba ito? Nike shoes (₱1,250) http://localhost/item/' in page
     assert '<meta property="og:title" content="Nike shoes · ₱1,250">' in page
     assert 'property="og:image" content="http://localhost/photos/' in page
     assert "facebook.com/sharer/sharer.php?u=http%3A//localhost/item/" in page

@@ -1,13 +1,7 @@
-// Item page: full screen photos, the Share button and the Download button. (Facebook and Messenger are plain links.)
+// Item page: Message us (copies the message too), Share, Download, and full screen photos.
+// (Facebook is a plain link.)
 
 const shareButton = document.getElementById("share-button");
-
-// showDone(shareButton, "Copied!") -> the button says "Copied!" for 2 seconds
-const showDone = (button, text) => {
-  const original = button.textContent;
-  button.textContent = text;
-  setTimeout(() => { button.textContent = original; }, 2000);
-};
 
 // copyLink("https://...") -> true when the link is on the clipboard
 const copyLink = async (url) => {
@@ -20,6 +14,24 @@ const copyLink = async (url) => {
     return false;
   }
 };
+
+// showNote("Link copied!") -> a short note at the bottom of the screen for 4 seconds
+const showNote = (text) => {
+  document.getElementById("note-text").textContent = text;
+  bootstrap.Toast.getOrCreateInstance(document.getElementById("note"), { delay: 4000 }).show();
+};
+
+// Message us: Messenger only types the message in by itself for Facebook Pages, so the message is
+// also copied. The link still opens Messenger as usual (no waiting: phones only open the Messenger
+// app straight from a tap), and the note tells the buyer to paste it if the chat is empty.
+const messageLink = document.getElementById("message-link");
+messageLink?.addEventListener("click", () => {
+  navigator.clipboard?.writeText(messageLink.dataset.message)
+    .then(() => showNote("Message copied. If the chat is empty, paste it and send."))
+    .catch(() => {
+      // No clipboard (old browser, or not https): Messenger still opens.
+    });
+});
 
 // On phones, navigator.share opens the share sheet: Messenger, Facebook, Viber, SMS, and Copy.
 // Without it (most computers) the same button copies the link, so it says so.
@@ -38,7 +50,7 @@ shareButton.addEventListener("click", async () => {
     }
     return;
   }
-  if (await copyLink(url)) showDone(shareButton, "Copied!");
+  if (await copyLink(url)) showNote("Link copied. Paste it anywhere to share.");
 });
 
 // --- Full screen photos (like mytee's full screen button) ---
