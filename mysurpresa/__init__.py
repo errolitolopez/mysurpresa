@@ -10,6 +10,8 @@ Layers (each only uses the ones below it):
   domain/        rules with no Flask or SQL: cleaning input, prices, photos
 """
 
+import os
+
 from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
 
@@ -24,9 +26,13 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     config.configure(app, test_config)
 
-    # Online (PythonAnywhere), the app sits behind a proxy that handles HTTPS. ProxyFix lets
-    # Flask see the real "https://", so share links and Facebook previews use the right address.
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+    # Online (PythonAnywhere), the app sits behind a proxy that handles HTTPS. ProxyFix lets Flask
+    # see the real "https://" (share links and Facebook previews use the right address) and the
+    # visitor's own address (the wrong-password lockout is per visitor, not for everyone behind the
+    # proxy). Only behind a proxy: without one these headers could be faked. Like myguro's
+    # MYGURO_TRUST_PROXY, it is turned on in the WSGI file (README).
+    if os.environ.get("MYSURPRESA_TRUST_PROXY") == "1":
+        app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
     database.init_app(app)
     app.cli.add_command(cli.set_password_command)
