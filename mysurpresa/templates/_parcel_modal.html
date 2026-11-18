@@ -1,0 +1,37 @@
+<div class="modal fade" id="parcel-modal" tabindex="-1" aria-labelledby="parcel-modal-title" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form class="modal-content" id="parcel-form" novalidate>
+      <div class="modal-header">
+        <h2 class="modal-title h5" id="parcel-modal-title">Add parcel</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="small text-body-secondary">Only you see parcels and their cost. Shoppers only see the items.</p>
+        <div class="mb-3">
+          <label class="form-label" for="parcel-name">Name</label>
+          <input class="form-control" id="parcel-name" maxlength="80" required placeholder="e.g. Mystery parcel #1">
+        </div>
+        <div class="row g-2 mb-3">
+          <div class="col">
+            <label class="form-label" for="parcel-cost">Cost (₱)</label>
+            <input class="form-control" id="parcel-cost" type="number" min="0" step="0.01" inputmode="decimal">
+          </div>
+          <div class="col">
+            <label class="form-label" for="parcel-date">Date bought</label>
+            <input class="form-control" id="parcel-date" type="date">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="parcel-note">Note</label>
+          <textarea class="form-control" id="parcel-note" rows="2" maxlength="500" placeholder="e.g. where you bought it"></textarea>
+        </div>
+        <div id="parcel-error" class="alert alert-danger py-2 mb-0 d-none" role="alert"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger me-auto bi bi-trash d-none" id="parcel-delete">Delete</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary bi bi-check-lg" id="parcel-save">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

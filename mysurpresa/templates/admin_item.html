@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.name }} · MySurpresa admin{% endblock %}
+
+{% block content %}
+{% include "_admin_navbar.html" %}
+
+<main class="container py-3" style="max-width: 720px" id="item-page" data-item-id="{{ item.id }}">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <a class="btn btn-link px-0 bi bi-arrow-left" href="{{ url_for('admin.items_page') }}">Items</a>
+    <a class="btn btn-link px-0 bi bi-eye" href="{{ url_for('shop.item_page', item_id=item.id) }}">View in shop</a>
+  </div>
+
+  <section class="card mb-3" aria-labelledby="photos-title">
+    <div class="card-header d-flex justify-content-between align-items-center gap-2">
+      <span class="fw-semibold bi bi-images" id="photos-title"> Photos</span>
+      <span class="badge text-bg-secondary" id="photo-count">0 / 10</span>
+    </div>
+    <div class="card-body">
+      <label class="btn btn-primary w-100 bi bi-camera" id="photo-pick">
+        Add photos
+        <input type="file" id="photo-input" accept="image/jpeg,image/png,image/webp" multiple hidden>
+      </label>
+      <p class="small text-body-secondary mt-2 mb-0">
+        The first photo is the cover in the shop. Photos are made smaller and their location data is removed.
+      </p>
+      <div id="photo-progress" class="small mt-2 d-none" role="status"></div>
+      <div id="photos-error" class="alert alert-danger mt-3 mb-0 d-none" role="alert"></div>
+      <div id="photos-empty" class="text-body-secondary mt-3 d-none">No photos yet.</div>
+      <div id="photos-grid" class="row row-cols-3 row-cols-sm-4 g-2 mt-1"></div>
+    </div>
+  </section>
+
+  <section class="card mb-3" aria-labelledby="details-title">
+    <div class="card-header d-flex justify-content-between align-items-center gap-2">
+      <span class="fw-semibold bi bi-pencil-square" id="details-title"> Details</span>
+    </div>
+    <form class="card-body" id="details-form" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for="name">Name</label>
+        <input class="form-control" id="name" maxlength="100" required>
+      </div>
+      <div class="row g-2 mb-3">
+        <div class="col">
+          <label class="form-label" for="price">Price (₱)</label>
+          <input class="form-control" id="price" type="number" min="0" step="0.01" inputmode="decimal" required>
+        </div>
+        <div class="col">
+          <label class="form-label" for="status">Status</label>
+          <select class="form-select" id="status">
+            <option value="draft">Draft (hidden)</option>
+            <option value="available">Available</option>
+            <option value="reserved">Reserved</option>
+            <option value="sold">Sold</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="parcel">Parcel</label>
+        <select class="form-select" id="parcel" data-parcel-select>
+          <option value="">No parcel</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Description</label>
+        <textarea class="form-control" id="description" rows="4" maxlength="2000"
+                  placeholder="Size, condition, brand, what's included..."></textarea>
+      </div>
+      <div id="details-error" class="alert alert-danger py-2 d-none" role="alert"></div>
+      <div id="details-saved" class="alert alert-success py-2 d-none" role="status">Saved.</div>
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-danger bi bi-trash" id="delete-button">Delete item</button>
+        <button type="submit" class="btn btn-primary ms-auto bi bi-check-lg" id="save-button">Save</button>
+      </div>
+    </form>
+  </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin_item.js') }}"></script>
+{% endblock %}

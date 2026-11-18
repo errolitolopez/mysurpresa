@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Items · MySurpresa admin{% endblock %}
+
+{% block content %}
+{% include "_admin_navbar.html" %}
+
+<main class="container py-3">
+  <div id="page-error" class="alert alert-danger d-none" role="alert"></div>
+
+  <div class="row row-cols-2 row-cols-md-4 g-3 mb-3" id="counts">
+    {% for status, label in [('available', 'Available'), ('reserved', 'Reserved'), ('sold', 'Sold'), ('draft', 'Draft')] %}
+      <div class="col">
+        <section class="card h-100" aria-labelledby="count-{{ status }}-title">
+          <div class="card-header small fw-semibold" id="count-{{ status }}-title">{{ label }}</div>
+          <div class="card-body py-2"><span class="h4 mb-0" data-count="{{ status }}">–</span></div>
+        </section>
+      </div>
+    {% endfor %}
+  </div>
+
+  <section class="card mb-3" aria-labelledby="items-title">
+    <div class="card-header d-flex justify-content-between align-items-center gap-2 flex-wrap">
+      <span class="fw-semibold bi bi-gift" id="items-title"> Items</span>
+      <div class="d-flex gap-2">
+        <select id="status-filter" class="form-select form-select-sm" aria-label="Show items with status">
+          <option value="">All statuses</option>
+          <option value="available">Available</option>
+          <option value="reserved">Reserved</option>
+          <option value="sold">Sold</option>
+          <option value="draft">Draft</option>
+        </select>
+        <select id="parcel-filter" class="form-select form-select-sm" aria-label="Show items from parcel">
+          <option value="">All parcels</option>
+        </select>
+      </div>
+    </div>
+    <div class="card-body pb-0">
+      <button type="button" class="btn btn-primary w-100 bi bi-plus-lg" data-bs-toggle="modal"
+              data-bs-target="#item-modal">Add item</button>
+      <div id="items-error" class="alert alert-danger mt-3 mb-0 d-none" role="alert"></div>
+    </div>
+    <div id="items-list" class="list-group list-group-flush mt-3"></div>
+  </section>
+
+  <section class="card mb-3" aria-labelledby="parcels-title">
+    <div class="card-header d-flex justify-content-between align-items-center gap-2">
+      <span class="fw-semibold bi bi-box-seam" id="parcels-title"> Parcels</span>
+      <button type="button" class="btn btn-outline-primary btn-sm bi bi-plus-lg" id="add-parcel-button">Add parcel</button>
+    </div>
+    <div id="parcels-error" class="alert alert-danger m-3 d-none" role="alert"></div>
+    <div id="parcels-list" class="list-group list-group-flush"></div>
+  </section>
+</main>
+
+{% include "_item_modal.html" %}
+{% include "_parcel_modal.html" %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin_items.js') }}"></script>
+{% endblock %}

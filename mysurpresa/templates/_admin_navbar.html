@@ -1,0 +1,24 @@
+<nav class="navbar bg-primary sticky-top">
+  <div class="container">
+    <span class="navbar-brand fw-bold">
+      <span class="bi bi-gift-fill me-1" aria-hidden="true"></span>MySurpresa
+      <span class="badge text-bg-secondary align-middle ms-1 small">Admin</span>
+    </span>
+    <button id="logout-button" class="btn btn-outline-secondary btn-sm bi bi-box-arrow-right">Logout</button>
+  </div>
+  <div class="container">
+    <ul class="nav nav-underline">
+      <li class="nav-item">
+        <a class="nav-link {{ 'active' if request.endpoint in ('admin.items_page', 'admin.item_page') }}"
+           href="{{ url_for('admin.items_page') }}">Items</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {{ 'active' if request.endpoint == 'admin.settings_page' }}"
+           href="{{ url_for('admin.settings_page') }}">Settings</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('shop.index') }}">View shop</a>
+      </li>
+    </ul>
+  </div>
+</nav>
