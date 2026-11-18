@@ -1,0 +1,15 @@
+<nav class="navbar bg-primary sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{{ url_for('shop.index') }}">
+      <span class="bi bi-gift-fill me-1" aria-hidden="true"></span>{{ shop.shop_name }}
+    </a>
+    <div class="d-flex gap-2">
+      {% if session.get('admin') %}
+        <a class="btn btn-outline-secondary btn-sm bi bi-gear" href="{{ url_for('admin.items_page') }}">Admin</a>
+      {% elif shop.facebook_url %}
+        <a class="btn btn-outline-secondary btn-sm bi bi-facebook" href="{{ shop.facebook_url }}"
+           target="_blank" rel="noopener">Page</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>

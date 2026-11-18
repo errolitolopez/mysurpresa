@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% set item_url = url_for('shop.item_page', item_id=item.id, _external=True) %}
+{% set message = "Hi! Available pa po ba ito? " ~ item.name ~ " (" ~ (item.price|peso) ~ ") " ~ item_url %}
+
+{% block title %}{{ item.name }} · {{ shop.shop_name }}{% endblock %}
+
+{% block head %}
+<meta name="description" content="{{ item.price|peso }} · {{ item.description|truncate(150) }}">
+<meta property="og:type" content="product">
+<meta property="og:title" content="{{ item.name }} · {{ item.price|peso }}">
+<meta property="og:description" content="{{ item.description|truncate(200) if item.description else shop.tagline }}">
+<meta property="og:url" content="{{ item_url }}">
+{% if photos %}
+<meta property="og:image" content="{{ url_for('shop.photo', filename=photos[0].filename ~ '.jpg', _external=True) }}">
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% include "_shop_navbar.html" %}
+
+<main class="container py-3" style="max-width: 720px">
+  <a class="btn btn-link px-0 mb-2 bi bi-arrow-left" href="{{ url_for('shop.index') }}">All items</a>
+
+  {% if item.status == 'draft' %}
+    <div class="alert alert-warning py-2">Draft: only you can see this page. Set the status to Available to show it in the shop.</div>
+  {% endif %}
+
+  <article class="card overflow-hidden {{ 'is-sold' if item.status == 'sold' }}">
+    {% if photos %}
+      <div id="gallery" class="carousel slide item-gallery" aria-label="Photos of {{ item.name }}">
+        {% if photos|length > 1 %}
+          <div class="carousel-indicators">
+            {% for photo in photos %}
+              <button type="button" data-bs-target="#gallery" data-bs-slide-to="{{ loop.index0 }}"
+                      {% if loop.first %}class="active" aria-current="true"{% endif %}
+                      aria-label="Photo {{ loop.index }}"></button>
+            {% endfor %}
+          </div>
+        {% endif %}
+        <div class="carousel-inner">
+          {% for photo in photos %}
+            <div class="carousel-item {{ 'active' if loop.first }}">
+              <img class="d-block w-100" alt="{{ item.name }}, photo {{ loop.index }}"
+                   {% if not loop.first %}loading="lazy"{% endif %}
+                   src="{{ url_for('shop.photo', filename=photo.filename ~ '.jpg') }}">
+            </div>
+          {% endfor %}
+        </div>
+        {% if photos|length > 1 %}
+          <button class="carousel-control-prev" type="button" data-bs-target="#gallery" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous photo</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#gallery" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next photo</span>
+          </button>
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="item-photo-empty bi bi-gift" aria-hidden="true"></div>
+    {% endif %}
+
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+        <h1 class="h4 mb-0">{{ item.name }}</h1>
+        {% include "_status_badge.html" %}
+      </div>
+      <p class="h3 fw-bold text-brand mb-3">{{ item.price|peso }}</p>
+      {% if item.description %}
+        <p class="keep-lines">{{ item.description }}</p>
+      {% endif %}
+
+      <div class="d-grid gap-2">
+        {% if item.status == 'sold' %}
+          <button class="btn btn-secondary btn-lg bi bi-bag-x" disabled>Sold</button>
+        {% elif shop.messenger_username %}
+          <a class="btn btn-primary btn-lg bi bi-messenger" target="_blank" rel="noopener"
+             href="https://m.me/{{ shop.messenger_username }}?text={{ message|urlencode }}">
+            {{ 'Ask if still available' if item.status == 'reserved' else 'Message to buy' }}
+          </a>
+        {% elif session.get('admin') %}
+          <div class="alert alert-info py-2 mb-0">
+            Set your Messenger username in <a href="{{ url_for('admin.settings_page') }}">Settings</a>
+            to show the "Message to buy" button here.
+          </div>
+        {% endif %}
+
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-secondary flex-fill bi bi-share" id="share-button"
+                  data-url="{{ item_url }}" data-title="{{ item.name }} · {{ item.price|peso }}">Share</button>
+          <a class="btn btn-outline-secondary flex-fill bi bi-facebook" target="_blank" rel="noopener"
+             href="https://www.facebook.com/sharer/sharer.php?u={{ item_url|urlencode }}">Facebook</a>
+          <button type="button" class="btn btn-outline-secondary flex-fill bi bi-link-45deg" id="copy-button"
+                  data-url="{{ item_url }}">Copy link</button>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  {% if session.get('admin') %}
+    <p class="text-center mt-3">
+      <a class="bi bi-pencil" href="{{ url_for('admin.item_page', item_id=item.id) }}"> Edit this item</a>
+    </p>
+  {% endif %}
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/share.js') }}"></script>
+{% endblock %}
