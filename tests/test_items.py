@@ -60,7 +60,7 @@ def test_delete_item(client):
 def test_seed_adds_samples_once(client):
     from conftest import flask_app
     runner = flask_app.test_cli_runner()
-    assert "Added 2 parcels and 9 items" in runner.invoke(args=["seed"]).output
+    assert "Added 1 parcel and 3 items" in runner.invoke(args=["seed"]).output
     assert "already has items" in runner.invoke(args=["seed"]).output
     items = client.get("/api/items").get_json()["items"]
-    assert len(items) == 9 and all(item["thumb_url"] for item in items)
+    assert len(items) == 3 and all(item["thumb_url"] for item in items)

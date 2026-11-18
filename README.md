@@ -53,7 +53,7 @@ Requires Python 3.10+.
 The first run creates the virtual environment, installs Flask and Pillow, creates the database
 and asks for the admin password (at least 8 characters). Then open `/login`.
 
-Try it with sample items: `.venv/bin/flask --app app seed` (only on an empty shop).
+Try it with 3 sample items with real photos: `.venv/bin/flask --app app seed` (only on an empty shop; photo credits in `mysurpresa/sample_photos/CREDITS.md`).
 
 Change the password later on the Settings page, or with `.venv/bin/flask --app app set-password`.
 
