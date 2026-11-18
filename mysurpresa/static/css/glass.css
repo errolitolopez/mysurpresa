@@ -43,6 +43,7 @@
   --glass-solid: #fff;
   --navbar-bg: rgba(255, 255, 255, 0.7);
   --page-base: #f3f4f6;
+  --brand-name: #b02a37; /* the dark red of "MySurpresa" in the logo */
   --viewer-bg: #000; /* full screen photos: black around them, like a phone's gallery app */
   --viewer-button-bg: rgba(255, 255, 255, 0.85);
   --page-gradient: radial-gradient(circle at top left, hsl(220 13% 95%), hsl(220 13% 91%));
@@ -641,13 +642,18 @@ html[data-style="neu"] .card.shadow-sm { box-shadow: var(--neu-raised) !importan
   color: transparent;
 }
 
-/* The app icon (the open mystery box, the same as the favicon) next to the shop name: a little
-   taller than the text, sitting on its baseline */
-.app-icon {
-  height: 1.6em;
-  width: 1.6em;
-  vertical-align: -0.4em;
+/* The navbar: the round logo, and the shop name in the logo's dark red and its heavy font */
+.navbar-logo {
+  width: 40px;
+  height: 40px;
 }
+.brand-name {
+  color: var(--brand-name);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.brand-name:hover,
+.brand-name:focus { color: var(--brand-name); }
 
 /* The round logo (the Facebook Page's profile photo) at the top of the shop and on the login page */
 .shop-logo {
