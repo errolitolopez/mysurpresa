@@ -18,25 +18,11 @@
 {% include "_shop_navbar.html" %}
 
 <main class="container py-3">
-  {# The welcome at the top: the tagline big, with sparkles, and three small chips that say how the shop works.
-     The navbar already shows the name, so the heading is for screen readers and search engines only. #}
-  {% set available = items|selectattr('status', 'equalto', 'available')|list|length %}
-  <header class="shop-hero text-center my-3 my-md-4">
+  {# The tagline, big in the name's red. The navbar already shows the name, so the heading is for
+     screen readers and search engines only. #}
+  <header class="text-center my-3 my-md-4">
     <h1 class="visually-hidden">{{ shop.shop_name }}</h1>
-    {% if shop.tagline %}
-      <p class="hero-tagline mb-2">
-        <span class="bi bi-stars hero-sparkle" aria-hidden="true"></span>
-        {{ shop.tagline }}
-        <span class="bi bi-stars hero-sparkle" aria-hidden="true"></span>
-      </p>
-    {% endif %}
-    <p class="text-body-secondary mb-3">Mga nakuha namin sa mystery parcel, para sa'yo na. Isang message lang!</p>
-    <div class="d-flex flex-wrap justify-content-center gap-2">
-      <span class="hero-chip bi bi-box-seam">
-        {{ available }} {{ 'item' if available == 1 else 'items' }} available</span>
-      <span class="hero-chip bi bi-messenger">Order via Messenger</span>
-      <span class="hero-chip bi bi-gem">Isa lang bawat item</span>
-    </div>
+    {% if shop.tagline %}<p class="hero-tagline mb-0">{{ shop.tagline }}</p>{% endif %}
   </header>
 
   <ul class="nav nav-pills justify-content-center mb-3">
