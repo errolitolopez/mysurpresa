@@ -1,34 +1,29 @@
-// Light / dark theme. Loaded in <head> so the theme is set before the page is drawn (no flash).
+// Colour theme (copied from myguro). Loaded in <head> so the theme is set before the page is drawn (no flash).
 // "auto" follows the device; a person's choice is kept in this browser only.
+// Every theme is built on Bootstrap's light or dark mode (data-bs-theme); the named themes
+// (Darcula, Solarized, Neon) then change the colours on top of it (data-mysurpresa-theme, see glass.css).
 
-(() => {
+(function () {
   const KEY = "mysurpresa-theme";
-  const CHOICES = ["auto", "light", "dark"];
-  const LABELS = { auto: "Auto", light: "Light", dark: "Dark" };
+  const CHOICES = ["auto", "light", "dark", "darcula", "solarized", "neon"];
+  // Which Bootstrap mode each named theme starts from.
+  const BASE = { light: "light", dark: "dark", darcula: "dark", solarized: "light", neon: "dark" };
   const dark = window.matchMedia("(prefers-color-scheme: dark)");
 
-  // saved() -> "auto", "light" or "dark" (the saved choice; "auto" if none or storage is blocked)
-  const saved = () => {
+  function saved() {
     try {
       const value = localStorage.getItem(KEY);
       return CHOICES.includes(value) ? value : "auto";
     } catch {
       return "auto";
     }
-  };
+  }
 
-  // apply("auto") -> sets data-bs-theme to "dark" or "light" by what the device prefers
-  const apply = (choice) => {
+  function apply(choice) {
     const theme = choice === "auto" ? (dark.matches ? "dark" : "light") : choice;
-    document.documentElement.setAttribute("data-bs-theme", theme);
-  };
-
-  // showButtons("dark") -> every theme button says "Theme: Dark"
-  const showButtons = (choice) => {
-    document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
-      button.textContent = `Theme: ${LABELS[choice]}`;
-    });
-  };
+    document.documentElement.setAttribute("data-bs-theme", BASE[theme]);
+    document.documentElement.setAttribute("data-mysurpresa-theme", theme);
+  }
 
   // No colour animation while the first theme is applied (removed once the page has loaded).
   document.documentElement.classList.add("preload");
@@ -39,20 +34,36 @@
   apply(saved());
   dark.addEventListener("change", () => apply(saved()));
 
+  // Saves a choice, draws it, and brings every picker on the page (the navbar menu)
+  // in line with it.
+  function choose(choice) {
+    choice = CHOICES.includes(choice) ? choice : "auto";
+    try {
+      localStorage.setItem(KEY, choice);
+    } catch {
+      // Private window or blocked storage: the choice only lasts for this page.
+    }
+    apply(choice);
+    showChoice(choice);
+  }
+
+  function showChoice(choice) {
+    document.querySelectorAll("[data-theme-select]").forEach((select) => (select.value = choice));
+    document.querySelectorAll("[data-theme-choice]").forEach((button) => {
+      const current = button.dataset.themeChoice === choice;
+      button.classList.toggle("active", current);
+      button.setAttribute("aria-current", current ? "true" : "false");
+    });
+  }
 
   document.addEventListener("DOMContentLoaded", () => {
-    showButtons(saved());
-    document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
-      button.addEventListener("click", () => {
-        const next = CHOICES[(CHOICES.indexOf(saved()) + 1) % CHOICES.length];
-        try {
-          localStorage.setItem(KEY, next);
-        } catch {
-          // Private window or blocked storage: the choice only lasts for this page.
-        }
-        apply(next);
-        showButtons(next);
-      });
+    showChoice(saved());
+    document.querySelectorAll("[data-theme-select]").forEach((select) => {
+      select.addEventListener("change", () => choose(select.value));
+    });
+    // The quick menu in the navbar: one button per theme.
+    document.querySelectorAll("[data-theme-choice]").forEach((button) => {
+      button.addEventListener("click", () => choose(button.dataset.themeChoice));
     });
   });
 })();

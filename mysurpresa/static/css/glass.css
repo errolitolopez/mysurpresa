@@ -1,14 +1,38 @@
-/* Simple glassmorphism on top of Bootstrap (same look as sari-utang), with a pink brand colour: a calm gradient
-   page, frosted (translucent + blurred) cards, modals and navbar, transparent inputs.
-   Light and dark follow data-bs-theme (see theme.js). Where blur isn't supported, or the
-   person asked for less transparency, panels are plain and opaque. */
+/* The MyGuro look (copied from myguro/static/css/glass.css): glassmorphism on top of Bootstrap in a
+   gray / slate palette, the indigo-to-cyan accent, Plus Jakarta Sans, drifting aurora behind the glass,
+   and the same themes (Auto, Light, Dark, Darcula, Solarized, Neon; see theme.js). Only the parts
+   MySurpresa uses were copied; the shop's own rules are at the end. */
 
 :root {
+  /* Bootstrap reads its text font from this variable. The system fonts are the fallback while Plus Jakarta Sans loads. */
+  /* Bootstrap's own corner sizes (inputs, list groups, badges, tables and anything using .rounded) a little smaller. */
+  --bs-border-radius-sm: 0.2rem;
+  --bs-border-radius: 0.3rem;
+  --bs-border-radius-lg: 0.4rem;
+  --bs-border-radius-xl: 0.8rem;
+  --bs-border-radius-xxl: 1.6rem;
+  --bs-body-font-size: 0.9375rem;
+  --bs-body-font-family: "Plus Jakarta Sans", Inter, Roboto, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --glass-bg: rgba(255, 255, 255, 0.6);
   --glass-bg-strong: rgba(255, 255, 255, 0.88);
   --glass-border: rgba(226, 232, 240, 0.8);
-  --glass-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --glass-blur: blur(12px);
+  /* Two soft layers plus a 1px inner light edge: the panel looks lifted off the page. */
+  --glass-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 12px 28px -8px rgba(15, 23, 42, 0.18),
+    0 4px 8px -4px rgba(15, 23, 42, 0.08);
+  /* Blur cost grows with the radius, and every panel on the page does it: a small radius is much lighter and still
+     frosted. (It was 14px.) */
+  --glass-blur: blur(8px);
+  --radius-card: 1rem; /* was 1.25rem: every corner in the app is about 20% smaller than it was */
+  /* The one accent gradient: primary buttons, progress bars, the active tab, score rings. */
+  --accent-from: #4f46e5;
+  --accent-to: #06b6d4;
+  --accent-gradient: linear-gradient(135deg, var(--accent-from), var(--accent-to));
+  --aurora-1: rgba(99, 102, 241, 0.28);
+  --aurora-2: rgba(6, 182, 212, 0.22);
+  --aurora-3: rgba(236, 72, 153, 0.14);
+  --ring-track: rgba(100, 116, 139, 0.2);
+  --skeleton-base: rgba(148, 163, 184, 0.18);
+  --skeleton-shine: rgba(255, 255, 255, 0.55);
   --glass-hover: rgba(255, 255, 255, 0.85);
   --glass-input: transparent;
   --glass-input-focus: rgba(255, 255, 255, 0.55);
@@ -20,32 +44,189 @@
   --page-base: #f3f4f6;
   --page-gradient: radial-gradient(circle at top left, hsl(220 13% 95%), hsl(220 13% 91%));
   --scroll-thumb: rgba(100, 116, 139, 0.5);
-  --brand: #d63384;
-  --brand-hover: #b02a6b;
-  --brand-soft: rgba(214, 51, 132, 0.12);
-  --sold-overlay: rgba(255, 255, 255, 0.55);
+  /* Links use the text colour (underlined), like the navbar tabs, not Bootstrap's blue. Bootstrap
+     reads the rgb variables, and its dark mode sets them too, so they are set here for all themes. */
+  --bs-link-color: var(--bs-body-color);
+  --bs-link-color-rgb: var(--bs-body-color-rgb);
+  --bs-link-hover-color: var(--bs-emphasis-color);
+  --bs-link-hover-color-rgb: var(--bs-emphasis-color-rgb);
+  --success-color: #22c55e;
+  --confirm-rgb: 99, 102, 241; /* the confirm colour as r, g, b, for focus rings */
+  --confirm-bg: #4f46e5;
+  --confirm-hover: #4338ca;
+  --confirm-active: #3730a3;
+  --confirm-text: #fff;
+  --danger-bg: #dc3545;
+  --danger-hover: #bb2d3b;
+  --danger-active: #b02a37;
+  /* Gray buttons: a soft slate with dark text on the light themes. The solid gray with white text
+     only suits the dark themes (set under [data-bs-theme="dark"]). */
+  --neutral-bg: #e2e8f0;
+  --neutral-hover: #cbd5e1;
+  --neutral-active: #b8c4d6;
+  --neutral-text: #334155;
+  /* A visible edge, so the button does not melt into light glass (the eye button next to a box). */
+  --neutral-border: #94a3b8;
+  --warn-bg: #ffc107;
+  --warn-hover: #ffca2c;
+  --warn-active: #ffcd39;
+  --warn-text: #000;
 }
 
 [data-bs-theme="dark"] {
   --glass-bg: rgba(15, 23, 42, 0.6);
   --glass-bg-strong: rgba(15, 23, 42, 0.9);
   --glass-border: rgba(51, 65, 85, 0.8);
-  --glass-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --glass-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 12px 28px -8px rgba(0, 0, 0, 0.55),
+    0 4px 8px -4px rgba(0, 0, 0, 0.35);
   --glass-hover: rgba(30, 41, 59, 0.8);
+  --aurora-1: rgba(99, 102, 241, 0.32);
+  --aurora-2: rgba(6, 182, 212, 0.2);
+  --aurora-3: rgba(236, 72, 153, 0.14);
+  --ring-track: rgba(148, 163, 184, 0.22);
+  --skeleton-base: rgba(148, 163, 184, 0.14);
+  --skeleton-shine: rgba(255, 255, 255, 0.1);
   --glass-input: transparent;
   --glass-input-focus: rgba(15, 23, 42, 0.5);
   --glass-input-disabled: rgba(100, 116, 139, 0.2);
   --glass-input-border: rgba(55, 65, 81, 0.8);
   --glass-input-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
   --glass-solid: #1e293b;
+  --neutral-bg: #6c757d;
+  --neutral-hover: #5c636a;
+  --neutral-active: #565e64;
+  --neutral-text: #fff;
+  --neutral-border: var(--neutral-bg);
   --navbar-bg: rgba(15, 23, 42, 0.7);
   --page-base: #0f172a;
   --page-gradient: radial-gradient(circle at top left, hsl(222 47% 15%), hsl(222 47% 11%));
   --scroll-thumb: rgba(148, 163, 184, 0.3);
-  --brand: #e8589f;
-  --brand-hover: #f07ab3;
-  --brand-soft: rgba(232, 88, 159, 0.16);
-  --sold-overlay: rgba(15, 23, 42, 0.55);
+}
+
+/* Named themes. Each one sits on Bootstrap's dark (Darcula) or light (Solarized) mode and only
+   changes colours, so the Bootstrap variables below are set here as well as the glass ones. */
+[data-mysurpresa-theme="darcula"] {
+  --bs-body-bg: #2b2b2b;
+  --bs-body-bg-rgb: 43, 43, 43;
+  --bs-body-color: #a9b7c6;
+  --bs-body-color-rgb: 169, 183, 198;
+  --bs-emphasis-color: #d4dde8;
+  --bs-emphasis-color-rgb: 212, 221, 232;
+  --bs-secondary-color: rgba(169, 183, 198, 0.7);
+  --bs-secondary-bg: #3c3f41;
+  --bs-secondary-bg-rgb: 60, 63, 65;
+  --bs-tertiary-bg: #313335;
+  --bs-tertiary-bg-rgb: 49, 51, 53;
+  --bs-border-color: #515151;
+  --glass-bg: rgba(60, 63, 65, 0.7);
+  --glass-bg-strong: rgba(60, 63, 65, 0.94);
+  --glass-border: rgba(81, 81, 81, 0.9);
+  --glass-hover: rgba(78, 82, 84, 0.85);
+  --glass-input-focus: rgba(43, 43, 43, 0.6);
+  --glass-input-border: rgba(94, 96, 98, 0.9);
+  --glass-solid: #3c3f41;
+  --navbar-bg: rgba(60, 63, 65, 0.8);
+  --page-base: #2b2b2b;
+  --page-gradient: radial-gradient(circle at top left, #313335, #262626);
+  /* Buttons in the IDE's own colours: steel blue, brick red, amber. */
+  --success-color: #6a8759;
+  --accent-from: #4b6eaf;
+  --accent-to: #6897bb;
+  --confirm-rgb: 75, 110, 175;
+  --confirm-bg: #4b6eaf;
+  --confirm-hover: #5a7fc0;
+  --confirm-active: #3f5e96;
+  --danger-bg: #bc3f3c;
+  --danger-hover: #cc4c49;
+  --danger-active: #a53735;
+  --warn-bg: #e0a33a;
+  --warn-hover: #eab257;
+  --warn-active: #f0bf70;
+}
+[data-mysurpresa-theme="solarized"] {
+  --bs-body-bg: #fdf6e3;
+  --bs-body-bg-rgb: 253, 246, 227;
+  --bs-body-color: #586e75;
+  --bs-body-color-rgb: 88, 110, 117;
+  --bs-emphasis-color: #073642;
+  --bs-emphasis-color-rgb: 7, 54, 66;
+  --bs-secondary-color: rgba(88, 110, 117, 0.75);
+  --bs-secondary-bg: #eee8d5;
+  --bs-secondary-bg-rgb: 238, 232, 213;
+  --bs-tertiary-bg: #f5eedb;
+  --bs-tertiary-bg-rgb: 245, 238, 219;
+  --bs-border-color: #ddd6c1;
+  --glass-bg: rgba(238, 232, 213, 0.65);
+  --glass-bg-strong: rgba(238, 232, 213, 0.94);
+  --glass-border: rgba(211, 203, 183, 0.9);
+  --glass-hover: rgba(245, 238, 219, 0.9);
+  --glass-input-focus: rgba(253, 246, 227, 0.7);
+  --glass-input-border: rgba(196, 188, 165, 0.9);
+  --glass-solid: #fdf6e3;
+  --neutral-bg: #eee8d5;
+  --neutral-hover: #e3dcc3;
+  --neutral-active: #d6cdb0;
+  --neutral-text: #586e75;
+  --neutral-border: #b5ad94;
+  --navbar-bg: rgba(238, 232, 213, 0.8);
+  --page-base: #fdf6e3;
+  --page-gradient: radial-gradient(circle at top left, #fdf6e3, #eee8d5);
+  /* Buttons in the Solarized accents: blue, red, yellow. */
+  --success-color: #859900;
+  --accent-from: #268bd2;
+  --accent-to: #2aa198;
+  --confirm-rgb: 38, 139, 210;
+  --confirm-bg: #268bd2;
+  --confirm-hover: #1f78b8;
+  --confirm-active: #1a6aa4;
+  --danger-bg: #dc322f;
+  --danger-hover: #c42a27;
+  --danger-active: #ac2421;
+  --warn-bg: #b58900;
+  --warn-hover: #9d7800;
+  --warn-active: #876800;
+  --warn-text: #fff;
+}
+[data-mysurpresa-theme="neon"] {
+  /* A dark base with electric violet and cyan. */
+  --bs-body-bg: #090b1a;
+  --bs-body-bg-rgb: 9, 11, 26;
+  --bs-body-color: #cfd6f6;
+  --bs-body-color-rgb: 207, 214, 246;
+  --bs-emphasis-color: #fff;
+  --bs-emphasis-color-rgb: 255, 255, 255;
+  --bs-secondary-color: rgba(207, 214, 246, 0.65);
+  --bs-secondary-bg: #141833;
+  --bs-secondary-bg-rgb: 20, 24, 51;
+  --bs-tertiary-bg: #0f1228;
+  --bs-tertiary-bg-rgb: 15, 18, 40;
+  --bs-border-color: #272c55;
+  --success-color: #34d399;
+  --accent-from: #a855f7;
+  --accent-to: #22d3ee;
+  --confirm-bg: #7c3aed;
+  --confirm-hover: #6d28d9;
+  --confirm-active: #5b21b6;
+  --glass-bg: rgba(20, 24, 51, 0.62);
+  --glass-bg-strong: rgba(16, 19, 42, 0.94);
+  --glass-border: rgba(124, 58, 237, 0.35);
+  --glass-hover: rgba(34, 40, 82, 0.85);
+  --glass-input-focus: rgba(9, 11, 26, 0.6);
+  --glass-input-border: rgba(99, 102, 241, 0.4);
+  --glass-solid: #141833;
+  --navbar-bg: rgba(12, 14, 32, 0.78);
+  --page-base: #090b1a;
+  --page-gradient: radial-gradient(circle at top left, #12163a, #070815);
+  --aurora-1: rgba(168, 85, 247, 0.38);
+  --aurora-2: rgba(34, 211, 238, 0.26);
+  --aurora-3: rgba(244, 114, 182, 0.2);
+  --confirm-rgb: 124, 58, 237;
+  --danger-bg: #f43f5e;
+  --danger-hover: #fb5b77;
+  --danger-active: #e11d48;
+  --warn-bg: #fbbf24;
+  --warn-hover: #fcd34d;
+  --warn-active: #fde68a;
 }
 
 body {
@@ -62,15 +243,15 @@ body,
 .form-control,
 .form-select,
 .list-group-item,
+.bg-body,
 footer {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.15s ease;
 }
 .preload * { transition: none !important; }
 
-/* Frosted panels. Blur is only on panels, never on every list row: it is slow. */
+/* Frosted panels */
 .card,
 .modal-content,
-.dropdown-menu,
 .toast {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -84,39 +265,83 @@ footer {
    --bs-border-radius, not from the card's own variable, so the header kept a 5px corner and its
    square tint showed outside the curve. */
 .card {
-  --bs-card-border-radius: 1rem;
-  --bs-card-inner-border-radius: calc(1rem - var(--bs-card-border-width));
+  --bs-card-border-radius: var(--radius-card);
+  --bs-card-inner-border-radius: calc(var(--radius-card) - var(--bs-card-border-width));
 }
 .modal-content {
-  --bs-modal-border-radius: 1rem;
-  --bs-modal-inner-border-radius: calc(1rem - var(--bs-modal-border-width));
+  --bs-modal-border-radius: var(--radius-card);
+  --bs-modal-inner-border-radius: calc(var(--radius-card) - var(--bs-modal-border-width));
+}
+/* Dropdown menus are plain and opaque, not glass: they open over busy content (cards, tables), where
+   see-through text is hard to read. */
+.dropdown-menu {
+  --bs-dropdown-border-radius: 0.6rem;
+  /* The "inner" radius too (the rounded first and last item): Bootstrap builds it from --bs-border-radius, so without
+     this the highlighted item had a different corner from the menu around it. Same reason as .card above. */
+  --bs-dropdown-inner-border-radius: calc(0.6rem - var(--bs-dropdown-border-width));
+  --bs-dropdown-bg: var(--glass-solid);
+  --bs-dropdown-border-color: var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }
 
 .modal-content { background: var(--glass-bg-strong); }
 .modal-backdrop.show { opacity: 0.35; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
 
 /* The top bar: frosted glass that follows the theme. The brand and the active tab use the
-   plain text colour (black on light, white on dark), so it reads on both. */
-.navbar.bg-primary {
-  /* !important beats Bootstrap's bg-primary utility, which is itself !important */
+   plain text colour (black on light, white on dark). */
+.navbar.bg-success {
   background-color: var(--navbar-bg) !important;
   border-bottom: 1px solid var(--glass-border);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
+  /* backdrop-filter makes the bar its own layer, so without a z-index the frosted cards below it
+     paint over its dropdown menu. 1000 = Bootstrap's dropdown level; modals (1055) stay above. */
+  z-index: 1000;
 }
+/* Same problem for a dropdown inside a card (the Print menu): each frosted card is its own layer,
+   so the next card would paint over the open menu. Lift only the card that has one open. */
+.card:has(.dropdown-menu.show) { position: relative; z-index: 2; }
 .navbar .nav-underline { --bs-nav-underline-link-active-color: var(--bs-emphasis-color); }
 .navbar .nav-link.active { border-bottom-color: var(--bs-emphasis-color); }
 
-/* Lists: rows sit on the glass of whatever holds them */
+/* Fixed bottom bars (answering, editor) and other bg-body boxes */
+.bg-body { --bs-bg-opacity: 0.72; }
+.position-fixed.bg-body {
+  --bs-bg-opacity: 0.8;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-color: var(--glass-border) !important;
+}
+.bg-body-tertiary { --bs-bg-opacity: 0.55; }
+
+/* Lists: rows sit on the glass of whatever holds them (no blur per row, it is slow) */
 .list-group {
   --bs-list-group-bg: var(--glass-bg);
   --bs-list-group-border-color: var(--glass-border);
+  border-radius: var(--bs-border-radius);
+  box-shadow: var(--glass-shadow);
+}
+/* A menu with no padding (the notifications bell) has a list that touches its edges: its square row backgrounds
+   poked out past the menu's rounded corners. Cut them to the menu's shape. */
+.dropdown-menu.p-0 { overflow: hidden; }
+
+/* A list inside a card or a window already sits on a panel that has its own shadow. A second big shadow under
+   the list made a curved, doubled edge inside the card, so lists there have none. (On the page itself they keep it.) */
+.card .list-group,
+.modal-content .list-group {
+  box-shadow: none;
+}
+
+/* A flush list sits inside a card, and the card already has the outline, the corners and the shadow. The rule above
+   gave the list its own radius and shadow as well (Bootstrap's `flush` sets them to none, but this file loads
+   later), so its first row had rounded top corners and a second shadow edge inside the card. Flush means none. */
+.list-group-flush {
+  border-radius: 0;
+  box-shadow: none;
 }
 .list-group-item-action:hover,
 .list-group-item-action:focus { background-color: var(--glass-hover); }
-/* A list inside a card is already on the card's glass; no second box shadow */
-.card > .list-group { box-shadow: none; --bs-list-group-bg: transparent; }
 
 /* Form boxes: transparent with a thin border, like the glass they sit on */
 .form-control,
@@ -126,23 +351,183 @@ footer {
   box-shadow: var(--glass-input-shadow);
 }
 .form-control:focus,
-.form-select:focus { background-color: var(--glass-input-focus); }
+.form-select:focus {
+  background-color: var(--glass-input-focus);
+  border-color: var(--accent-to);
+  box-shadow: 0 0 0 0.2rem rgba(var(--confirm-rgb), 0.25);
+}
 .form-control:disabled,
 .form-select:disabled { background-color: var(--glass-input-disabled); }
 
-.alert { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+/* Bootstrap's "light" pieces would glare on dark glass */
+[data-bs-theme="dark"] .text-bg-light {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: var(--bs-body-color) !important;
+}
+[data-bs-theme="dark"] .table-light {
+  --bs-table-bg: rgba(255, 255, 255, 0.08);
+  --bs-table-color: var(--bs-body-color);
+  --bs-table-border-color: var(--glass-border);
+}
 
-/* A button with a "bi bi-..." class shows its icon before the text (the icon is drawn by
-   ::before, so changing the button's text from script keeps it). */
+/* Tables and alerts inside glass */
+.table { --bs-table-bg: transparent; }
+/* No blur on alerts (they were 8px): they sit on a tinted background that needs none, and each blur costs GPU time. */
+
+/* Every button looks the same: see-through glass with a form-box border, and the theme's accent on
+   the border when hovered or open. The label and its icon say what it does (Save, Delete, Download),
+   so colour does not have to. The outline classes stay in the markup; only the look is shared. One
+   place to change them all. The only coloured buttons are the chosen one of a segmented control
+   (.btn-toggle below) and the disabled look. A button with a "bi bi-..." class shows its icon before
+   the text (the icon is drawn by ::before, so changing the button's text from script keeps it). */
+.btn-success, .btn-outline-success,
+.btn-primary, .btn-outline-primary,
+.btn-danger, .btn-outline-danger,
+.btn-secondary, .btn-outline-secondary,
+.btn-warning, .btn-outline-warning {
+  --bs-btn-color: var(--bs-body-color);
+  --bs-btn-bg: var(--glass-input);
+  --bs-btn-border-color: var(--glass-input-border);
+  --bs-btn-hover-color: var(--bs-emphasis-color);
+  --bs-btn-hover-bg: var(--glass-hover);
+  --bs-btn-hover-border-color: var(--accent-to);
+  --bs-btn-active-color: var(--bs-emphasis-color);
+  --bs-btn-active-bg: var(--glass-hover);
+  --bs-btn-active-border-color: var(--accent-to);
+  --bs-btn-disabled-color: var(--bs-secondary-color);
+  --bs-btn-disabled-bg: var(--glass-input-disabled);
+  --bs-btn-disabled-border-color: var(--glass-input-border);
+  --bs-btn-focus-shadow-rgb: var(--confirm-rgb);
+  box-shadow: var(--glass-input-shadow);
+  font-weight: 500;
+}
+/* Toggle buttons (To do / Submitted, True / False, Plain text / Formatted, attempts) are a
+   segmented control: the ones that are off are calm glass with the text colour, the one that is
+   on is solid blue. They come after the solid rules above so they win. */
+.btn-toggle {
+  --bs-btn-color: var(--bs-body-color);
+  --bs-btn-bg: var(--glass-bg);
+  --bs-btn-border-color: var(--glass-input-border);
+  --bs-btn-hover-color: var(--bs-emphasis-color);
+  --bs-btn-hover-bg: var(--glass-hover);
+  --bs-btn-hover-border-color: var(--glass-input-border);
+  --bs-btn-active-color: var(--confirm-text);
+  --bs-btn-active-bg: var(--confirm-bg);
+  --bs-btn-active-border-color: var(--confirm-bg);
+  --bs-btn-disabled-color: var(--bs-secondary-color);
+  --bs-btn-disabled-bg: var(--glass-bg);
+  --bs-btn-disabled-border-color: var(--glass-input-border);
+}
 .btn.bi::before {
   margin-right: 0.45em;
   vertical-align: -0.125em;
 }
 .btn.bi:empty::before { margin-right: 0; }
 
+/* Calmer text sizes. Bootstrap's headings and big numbers are too large next to the small
+   buttons, so they are scaled down. The fs-* rules need !important because Bootstrap's own
+   utility classes use it. */
+h1, .h1 { font-size: 1.5rem; }
+h2, .h2 { font-size: 1.35rem; }
+h3, .h3 { font-size: 1.2rem; }
+h4, .h4 { font-size: 1.1rem; }
+h5, .h5 { font-size: 1rem; }
+h6, .h6 { font-size: 0.9375rem; }
+.fs-1 { font-size: 1.6rem !important; }
+.fs-2 { font-size: 1.4rem !important; }
+.fs-3 { font-size: 1.25rem !important; }
+.fs-4 { font-size: 1.1rem !important; }
+.fs-5 { font-size: 1rem !important; }
+.fs-6 { font-size: 0.875rem !important; }
+
+/* Small buttons on every screen size (copied from mymotoworks). About 28-32px high on phones is
+   still easy to tap. Bootstrap's own variables, not new selectors. btn-lg is only a little bigger
+   than btn-sm, so big Save buttons do not dominate the page. */
+.btn {
+  --bs-btn-padding-y: 0.2rem;
+  --bs-btn-padding-x: 0.55rem;
+  --bs-btn-font-size: 0.75rem;
+  --bs-btn-border-radius: 0.25rem;
+}
+
+.btn-sm {
+  --bs-btn-padding-y: 0.12rem;
+  --bs-btn-padding-x: 0.4rem;
+  --bs-btn-font-size: 0.6875rem;
+  --bs-btn-border-radius: 0.25rem;
+}
+
+.btn-lg {
+  --bs-btn-padding-y: 0.3rem;
+  --bs-btn-padding-x: 0.7rem;
+  --bs-btn-font-size: 0.8125rem;
+  --bs-btn-border-radius: 0.25rem;
+}
+
+/* A button that sits in a row with inputs and selects takes their height. Buttons are small on purpose (above) but form boxes
+   keep Bootstrap's size, so side by side the button looked shorter. The numbers are the height of a form box (38px;
+   36px on a phone, see below); flex centres the text and icon. */
+/* It also happens by itself, everywhere: a normal-size button in the same row as a normal-size input or select takes
+   their height, so no page needs the class. The rows are the flex toolbars (search box + buttons) and the filter
+   grids (inputs with a Clear button). Small buttons (.btn-sm) stay small on purpose, and so do small inputs. */
+.btn-input-height,
+.d-flex:has(> .form-control:not(.form-control-sm), > .form-select:not(.form-select-sm)) > .btn:not(.btn-sm):not(.btn-lg),
+.row:has(.form-control:not(.form-control-sm), .form-select:not(.form-select-sm)) .btn:not(.btn-sm):not(.btn-lg) {
+  min-height: 2.375rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- Mobile first: the phone layout is the base; wider screens add to it ---- */
+@media (max-width: 767.98px) {
+  /* A minimum height keeps tiny buttons and inputs tappable with a thumb. */
+  .btn { min-height: 1.75rem; }
+  .btn-sm { min-height: 1.5rem; }
+  .btn-lg { min-height: 2rem; }
+  .btn.btn-input-height,
+  .d-flex:has(> .form-control:not(.form-control-sm), > .form-select:not(.form-select-sm)) > .btn:not(.btn-sm):not(.btn-lg),
+  .row:has(.form-control:not(.form-control-sm), .form-select:not(.form-select-sm)) .btn:not(.btn-sm):not(.btn-lg) {
+    min-height: 2.25rem;
+  }
+
+  .form-control,
+  .form-select {
+    min-height: 2.25rem;
+    font-size: 0.875rem;
+  }
+
+  .form-control-lg {
+    min-height: 2.5rem;
+    font-size: 1rem;
+  }
+
+  .dropdown-item {
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+  }
+
+  .form-check-input {
+    width: 1.2em;
+    height: 1.2em;
+  }
+
+  .form-switch .form-check-input { width: 2.1em; }
+}
+
+@media (max-width: 575.98px) {
+  /* Full-screen forms use the visible height, so Save is not hidden under the browser bar. */
+  .modal-fullscreen-sm-down { height: 100dvh; }
+}
+
+@media (max-width: 767.98px) {
+  .modal-fullscreen-md-down { height: 100dvh; }
+}
+
+
 /* Slim scrollbar */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-thumb { background-color: var(--scroll-thumb); border-radius: 8px; }
+::-webkit-scrollbar-thumb { background-color: var(--scroll-thumb); border-radius: 6px; }
 
 /* Modals open with a small 3D pop */
 @keyframes modal-open {
@@ -153,44 +538,130 @@ footer {
 .modal.show .modal-dialog { animation: modal-open 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
 @media (prefers-reduced-motion: reduce) {
   .modal.show .modal-dialog { animation: none; }
-  body, .card, .navbar, .modal-content, .form-control, .form-select, .list-group-item, footer {
+  body, .card, .navbar, .modal-content, .form-control, .form-select, .list-group-item, .bg-body, footer {
     transition: none;
   }
 }
 
-/* Brand colour: Bootstrap's "primary" buttons and links become the MySurpresa pink, through
-   Bootstrap's own variables (no new button class). */
-:root,
-[data-bs-theme="dark"] {
-  --bs-link-color: var(--brand);
-  --bs-link-hover-color: var(--brand-hover);
-  --bs-link-color-rgb: 214, 51, 132;
-  --bs-link-hover-color-rgb: 176, 42, 107;
+/* No blur support, or the person asked for less transparency: plain opaque panels */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .card, .modal-content, .toast { background: var(--glass-solid); }
+  .navbar.bg-success { background-color: var(--glass-solid) !important; }
+  .list-group { --bs-list-group-bg: var(--glass-solid); }
 }
-.btn-primary {
-  --bs-btn-bg: var(--brand);
-  --bs-btn-border-color: var(--brand);
-  --bs-btn-hover-bg: var(--brand-hover);
-  --bs-btn-hover-border-color: var(--brand-hover);
-  --bs-btn-active-bg: var(--brand-hover);
-  --bs-btn-active-border-color: var(--brand-hover);
-  --bs-btn-disabled-bg: var(--brand);
-  --bs-btn-disabled-border-color: var(--brand);
+@media (prefers-reduced-transparency: reduce) {
+  .card, .modal-content, .toast {
+    background: var(--glass-solid); -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .navbar.bg-success {
+    background-color: var(--glass-solid) !important; -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .list-group { --bs-list-group-bg: var(--glass-solid); }
 }
-.btn-outline-primary {
-  --bs-btn-color: var(--brand);
-  --bs-btn-border-color: var(--brand);
-  --bs-btn-hover-bg: var(--brand);
-  --bs-btn-hover-border-color: var(--brand);
-  --bs-btn-active-bg: var(--brand-hover);
-  --bs-btn-active-border-color: var(--brand-hover);
-}
-.form-control:focus,
-.form-select:focus { border-color: var(--brand); box-shadow: 0 0 0 0.25rem var(--brand-soft); }
-.text-brand { color: var(--brand); }
 
-/* The gift in the navbar takes the brand colour */
-.navbar-brand .bi::before { color: var(--brand); }
+
+/* ---- Modern layer: aurora, accent gradient ---- */
+
+/* Aurora: three soft colour blobs drifting slowly behind the glass. One fixed layer that only moves
+   with transform (cheap for the GPU); the glass panels blur it where they cover it. See the animation below for
+   why it moves in steps. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 35% at 20% 25%, var(--aurora-1), transparent 70%),
+    radial-gradient(35% 40% at 80% 20%, var(--aurora-2), transparent 70%),
+    radial-gradient(45% 40% at 55% 85%, var(--aurora-3), transparent 70%);
+  /* The glass panels re-blur whatever is behind them every time it changes, so a background that moves 60 times a
+     second makes every panel blur 60 times a second, which is what made the page lag. steps(140) moves it in
+     small jumps, 10 a second: the blobs are so soft and slow that it still looks like drifting, with six times less
+     blurring. will-change keeps it on its own layer, so moving it does not repaint the page. */
+  animation: aurora-drift 28s steps(140) infinite alternate;
+  will-change: transform;
+}
+@keyframes aurora-drift {
+  0% { transform: translate3d(-2%, -1%, 0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(3%, 2%, 0) rotate(4deg) scale(1.06); }
+  100% { transform: translate3d(-1%, 3%, 0) rotate(-3deg) scale(1.02); }
+}
+@media print { body::after { display: none; } }
+
+/* Tabular numbers keep scores and counts from jumping when digits change. */
+body { font-variant-numeric: tabular-nums; }
+h1, .h1, h2, .h2, h3, .h3, h4, .h4 { font-weight: 700; letter-spacing: -0.01em; }
+
+/* The accent gradient on the chosen button of a segmented control. */
+.btn-check:checked + .btn-toggle, .btn-toggle.active {
+  background-image: var(--accent-gradient);
+  border-color: transparent;
+}
+.btn:disabled { background-image: none; }
+.btn { transition: transform 0.12s ease, filter 0.15s ease, background-color 0.15s ease; }
+.btn:not(:disabled):active { transform: translateY(1px) scale(0.98); }
+.progress-bar { background-image: var(--accent-gradient); }
+.navbar .nav-link.active { border-bottom-color: var(--accent-to); }
+
+/* Cards that are links lift a little on hover; the list rows only change colour. */
+a.card { transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease; }
+a.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-to);
+}
+
+/* Pages fade in once; nothing slides, so the layout never shifts. */
+@keyframes page-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+main { animation: page-in 0.35s ease both; }
+
+
+/* Smooth scrolling for anchors and scrollTo(). Only when motion is welcome (see the block below). */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+
+/* Less motion: still aurora, no drifting, no lifting. */
+@media (prefers-reduced-motion: reduce) {
+  body::after, main { animation: none; }
+  a.card:hover { transform: none; }
+}
+
+/* Alerts (messages, errors, tips): a glass box like a card with a bar in the meaning's colour, and the
+   normal text colour, so they follow every theme. Bootstrap's own alert colours are fixed light or dark
+   shades that clash with the themes. ":root .alert" is as specific as Bootstrap's dark-mode alert rules
+   ("[data-bs-theme=dark] .alert-info") and comes later, so it wins in both modes. */
+:root .alert {
+  --alert-color: var(--bs-secondary-color);
+  --bs-alert-color: var(--bs-body-color);
+  /* The same glass and border as a card, so an alert looks like part of the theme. Only the bar on
+     the left says what kind of message it is. */
+  --bs-alert-bg: var(--glass-bg);
+  --bs-alert-border-color: var(--glass-border);
+  --bs-alert-link-color: var(--bs-emphasis-color);
+  --bs-alert-border-radius: 0.6rem;
+  border-left: 4px solid var(--alert-color);
+}
+:root .alert-info { --alert-color: var(--accent-to); }
+:root .alert-success { --alert-color: var(--success-color); }
+:root .alert-warning { --alert-color: var(--warn-bg); }
+:root .alert-danger { --alert-color: var(--danger-bg); }
+:root .alert-dark { --alert-color: var(--bs-emphasis-color); }
+
+
+/* ---- MySurpresa: the shop ---- */
+
+/* Prices in the accent gradient, so they are the first thing the eye finds on a tile. */
+.text-accent {
+  background-image: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* The gift in the navbar takes the accent colour */
+.navbar-brand .bi::before { color: var(--accent-to); }
 
 /* Item photos are square tiles in the list, so the grid lines up whatever the photo shape */
 .item-photo {
@@ -204,8 +675,8 @@ footer {
   align-items: center;
   justify-content: center;
   font-size: 2.5rem;
-  background: var(--brand-soft);
-  color: var(--brand);
+  background: rgba(var(--confirm-rgb), 0.12);
+  color: var(--accent-to);
 }
 /* A sold item stays in the list (it shows that things sell), but faded */
 .is-sold .item-photo { filter: grayscale(1); opacity: 0.6; }
@@ -214,7 +685,7 @@ footer {
 .item-gallery img {
   max-height: 70vh;
   object-fit: contain;
-  background: var(--brand-soft);
+  background: rgba(var(--confirm-rgb), 0.08);
 }
 
 /* Small square photo in the admin rows */
@@ -222,23 +693,9 @@ footer {
   width: 56px;
   height: 56px;
   object-fit: cover;
-  border-radius: 0.5rem;
+  border-radius: var(--bs-border-radius-lg);
   flex-shrink: 0;
 }
 
 /* The description keeps the admin's line breaks */
 .keep-lines { white-space: pre-line; }
-
-/* No blur support, or the person asked for less transparency: plain opaque panels */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .card, .modal-content, .dropdown-menu, .toast { background: var(--glass-solid); }
-  .navbar.bg-primary { background-color: var(--glass-solid) !important; }
-}
-@media (prefers-reduced-transparency: reduce) {
-  .card, .modal-content, .dropdown-menu, .toast {
-    background: var(--glass-solid); -webkit-backdrop-filter: none; backdrop-filter: none;
-  }
-  .navbar.bg-primary {
-    background-color: var(--glass-solid) !important; -webkit-backdrop-filter: none; backdrop-filter: none;
-  }
-}

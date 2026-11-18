@@ -67,7 +67,7 @@
         <h1 class="h4 mb-0">{{ item.name }}</h1>
         {% include "_status_badge.html" %}
       </div>
-      <p class="h3 fw-bold text-brand mb-3">{{ item.price|peso }}</p>
+      <p class="h3 fw-bold text-accent mb-3">{{ item.price|peso }}</p>
       {% if item.description %}
         <p class="keep-lines">{{ item.description }}</p>
       {% endif %}

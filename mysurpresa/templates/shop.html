@@ -54,7 +54,7 @@
                    href="{{ url_for('shop.item_page', item_id=item.id) }}">{{ item.name }}</a>
               </h2>
               <div class="d-flex justify-content-between align-items-center gap-1">
-                <span class="fw-bold text-brand">{{ item.price|peso }}</span>
+                <span class="fw-bold text-accent">{{ item.price|peso }}</span>
                 {% include "_status_badge.html" %}
               </div>
             </div>

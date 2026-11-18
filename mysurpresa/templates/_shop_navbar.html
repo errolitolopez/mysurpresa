@@ -1,9 +1,10 @@
-<nav class="navbar bg-primary sticky-top">
+<nav class="navbar bg-success sticky-top">
   <div class="container">
     <a class="navbar-brand fw-bold" href="{{ url_for('shop.index') }}">
       <span class="bi bi-gift-fill me-1" aria-hidden="true"></span>{{ shop.shop_name }}
     </a>
-    <div class="d-flex gap-2">
+    <div class="d-flex align-items-center gap-2">
+      {% include "_theme_menu.html" %}
       {% if session.get('admin') %}
         <a class="btn btn-outline-secondary btn-sm bi bi-gear" href="{{ url_for('admin.items_page') }}">Admin</a>
       {% elif shop.facebook_url %}
