@@ -44,6 +44,7 @@
   --navbar-bg: rgba(255, 255, 255, 0.7);
   --page-base: #f3f4f6;
   --brand-name: #b02a37; /* the dark red of "MySurpresa" in the logo */
+  --app-red: #dc3545;    /* the red of the box icon */
   --viewer-bg: #000; /* full screen photos: black around them, like a phone's gallery app */
   --viewer-button-bg: rgba(255, 255, 255, 0.85);
   --page-gradient: radial-gradient(circle at top left, hsl(220 13% 95%), hsl(220 13% 91%));
@@ -658,6 +659,37 @@ html[data-style="neu"] .card.shadow-sm { box-shadow: var(--neu-raised) !importan
 }
 .brand-name:hover,
 .brand-name:focus { color: var(--brand-name); }
+
+/* The welcome at the top of the shop: the tagline big in the name's red, with sparkles either side,
+   and small chips that sit raised on the page like the cards. */
+.hero-tagline {
+  font-size: clamp(1.5rem, 6vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--brand-name);
+}
+.hero-sparkle { font-size: 0.7em; color: var(--app-red); vertical-align: 0.15em; }
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.35rem 0.8rem;
+  border-radius: 50rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: var(--glass-bg);
+  /* the small raised shadow of the neumorphic buttons; the card one is too big for a chip */
+  box-shadow: var(--neu-raised-sm, var(--glass-shadow));
+}
+.hero-chip::before { color: var(--app-red); }
+
+/* The All / Available filter: the chosen one in the shop's red (Bootstrap's blue clashed with it) */
+.nav-pills {
+  --bs-nav-pills-link-active-bg: var(--app-red);
+  --bs-nav-link-color: var(--bs-body-color);
+  --bs-nav-link-hover-color: var(--brand-name);
+}
 
 /* The round logo (the Facebook Page's profile photo) at the top of the shop and on the login page */
 .shop-logo {
