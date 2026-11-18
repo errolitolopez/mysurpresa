@@ -43,7 +43,6 @@
   --glass-solid: #fff;
   --navbar-bg: rgba(255, 255, 255, 0.7);
   --page-base: #f3f4f6;
-  --app-icon: #dc3545; /* the red of the shopping cart icon (favicon.svg uses the same) */
   --viewer-bg: #000; /* full screen photos: black around them, like a phone's gallery app */
   --viewer-button-bg: rgba(255, 255, 255, 0.85);
   --page-gradient: radial-gradient(circle at top left, hsl(220 13% 95%), hsl(220 13% 91%));
@@ -642,8 +641,13 @@ html[data-style="neu"] .card.shadow-sm { box-shadow: var(--neu-raised) !importan
   color: transparent;
 }
 
-/* The app icon (a red shopping cart, the same as the favicon) next to the shop name */
-.app-icon::before { color: var(--app-icon); }
+/* The app icon (the open surprise box, the same as the favicon) next to the shop name: a little
+   taller than the text, sitting on its baseline */
+.app-icon {
+  height: 1.6em;
+  width: 1.6em;
+  vertical-align: -0.4em;
+}
 
 /* Item photos are square tiles in the list, so the grid lines up whatever the photo shape */
 .item-photo {

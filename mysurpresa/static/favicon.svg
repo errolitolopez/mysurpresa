@@ -1,4 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" role="img" aria-label="MySurpresa">
-  <!-- The app icon: a red shopping cart (Bootstrap Icons "cart-fill", MIT license), the same red as --app-icon in glass.css -->
-  <path fill="#dc3545" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MySurpresa">
+  <!-- An open surprise box with confetti popping out: the MySurpresa app icon -->
+  <!-- confetti -->
+  <rect x="17" y="9" width="5" height="9" rx="1.5" fill="#ffc107" transform="rotate(-25 19.5 13.5)"/>
+  <rect x="40" y="5" width="5" height="9" rx="1.5" fill="#06b6d4" transform="rotate(30 42.5 9.5)"/>
+  <rect x="50" y="17" width="5" height="8" rx="1.5" fill="#4f46e5" transform="rotate(-35 52.5 21)"/>
+  <rect x="28" y="2" width="4" height="7" rx="1.5" fill="#22c55e" transform="rotate(15 30 5.5)"/>
+  <circle cx="34" cy="16" r="2.6" fill="#d63384"/>
+  <circle cx="10" cy="22" r="2.2" fill="#06b6d4"/>
+  <circle cx="56" cy="8" r="2.2" fill="#ffc107"/>
+  <circle cx="24" cy="24" r="1.8" fill="#4f46e5"/>
+  <path d="M46 26l1.6 3.4 3.7.4-2.8 2.5.8 3.6-3.3-1.9-3.3 1.9.8-3.6-2.8-2.5 3.7-.4z" fill="#ffc107"/>
+  <!-- open lid, tipped back to the left -->
+  <g transform="rotate(-24 9 34)">
+    <rect x="7" y="27" width="40" height="9" rx="2" fill="#b02a37"/>
+    <rect x="24" y="27" width="6" height="9" fill="#fff" opacity="0.9"/>
+  </g>
+  <!-- box -->
+  <rect x="12" y="35" width="40" height="24" rx="3" fill="#dc3545"/>
+  <rect x="12" y="35" width="40" height="5" fill="#b02a37"/>
+  <rect x="29" y="35" width="6" height="24" fill="#fff" opacity="0.9"/>
 </svg>
