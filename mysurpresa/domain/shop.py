@@ -11,7 +11,7 @@ MAX_URL_LENGTH = 200
 
 DEFAULTS = {
     "shop_name": "MySurpresa",
-    "tagline": "Mga nakuha namin sa mystery parcel, sa'yo na!",
+    "tagline": "MySurpresa na abot kaya",
     "messenger_username": "",
     "facebook_url": "",
 }
