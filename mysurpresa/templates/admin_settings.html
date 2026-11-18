@@ -6,6 +6,11 @@
 {% include "_admin_navbar.html" %}
 
 <main class="container py-3" style="max-width: 720px">
+  {% if must_change_password %}
+    <div class="alert alert-warning" role="alert" id="must-change-note">
+      Welcome! You logged in with a temporary password. Choose your own password below to start using the admin pages.
+    </div>
+  {% endif %}
   <section class="card mb-3" aria-labelledby="shop-title">
     <div class="card-header d-flex justify-content-between align-items-center gap-2">
       <span class="fw-semibold bi bi-shop" id="shop-title"> Shop</span>

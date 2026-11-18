@@ -18,22 +18,10 @@ if [ ! -f .venv/.installed ] || [ requirements.txt -nt .venv/.installed ]; then
   touch .venv/.installed
 fi
 
-# 2. Database (safe to run every time, existing data is kept)
-.venv/bin/flask --app app init-db
+# 2. The database and the default admin password ("admin", changed at the first login) are
+#    created when the app starts, so there is nothing else to set up.
 
-# 3. Ask for the admin password if none is set yet
-has_password=$(.venv/bin/python -c "
-import sqlite3
-row = sqlite3.connect('instance/mysurpresa.db').execute(
-    \"SELECT 1 FROM settings WHERE key = 'password_hash'\").fetchone()
-print('yes' if row else 'no')
-")
-if [ "$has_password" = "no" ]; then
-  echo "No admin password set yet."
-  .venv/bin/flask --app app set-password
-fi
-
-# 4. Start the app
+# 3. Start the app
 if [ "$1" = "phone" ]; then
   ip=$(hostname -I 2>/dev/null | awk '{print $1}')
   echo "Open on your phone: http://${ip:-<your-computer-ip>}:5000"

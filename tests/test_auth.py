@@ -65,3 +65,52 @@ def test_change_password_checks_current_and_length(client):
         "current_password": PASSWORD, "new_password": "new-password-1",
         "confirm_password": "other-password"})
     assert error(response) == "The new passwords don't match."
+
+
+def test_temporary_password_must_be_changed_at_first_login(anonymous):
+    from conftest import flask_app
+    runner = flask_app.test_cli_runner()
+    result = runner.invoke(args=["set-password", "--password", "temporary-1", "--temporary"])
+    assert "must be changed" in result.output
+
+    response = anonymous.post("/api/login", json={"password": "temporary-1"})
+    assert response.get_json()["must_change_password"] is True
+    # Every admin page goes to Settings until the password is changed
+    for path in ("/admin", "/admin/items/1"):
+        assert anonymous.get(path).headers["Location"].endswith("/admin/settings")
+    assert "temporary password" in anonymous.get("/admin/settings").get_data(as_text=True)
+
+    headers = {"X-Requested-With": "fetch"}
+    same = anonymous.post("/api/password", headers=headers, json={
+        "current_password": "temporary-1", "new_password": "temporary-1",
+        "confirm_password": "temporary-1"})
+    assert error(same) == "The new password must be different from the current one."
+    response = anonymous.post("/api/password", headers=headers, json={
+        "current_password": "temporary-1", "new_password": "my-own-password",
+        "confirm_password": "my-own-password"})
+    assert response.status_code == 200
+    assert anonymous.get("/admin").status_code == 200
+    assert "temporary password" not in anonymous.get("/admin/settings").get_data(as_text=True)
+
+
+def test_normal_password_has_no_first_login_step(anonymous):
+    response = anonymous.post("/api/login", json={"password": PASSWORD})
+    assert response.get_json()["must_change_password"] is False
+    assert anonymous.get("/admin").status_code == 200
+
+
+def test_new_database_has_admin_password_to_change(anonymous):
+    """Like myguro: a new database logs in with "admin", and the password must be changed first."""
+    import sqlite3
+
+    from conftest import flask_app, os
+    connection = sqlite3.connect(os.environ["MYSURPRESA_DATABASE"])
+    connection.execute("DELETE FROM settings")
+    connection.commit()
+    connection.close()
+    assert flask_app.test_cli_runner().invoke(args=["init-db"]).exit_code == 0
+
+    response = anonymous.post("/api/login", json={"password": "admin"})
+    assert response.status_code == 200
+    assert response.get_json()["must_change_password"] is True
+    assert anonymous.get("/admin").headers["Location"].endswith("/admin/settings")

@@ -67,6 +67,10 @@ passwordForm.addEventListener("submit", async (event) => {
     if (!response.ok) throw new Error(await errorText(response));
     passwordForm.reset();
     flash("password-saved");
+    // First login: the temporary password is gone, so the other admin pages open now.
+    if (document.getElementById("must-change-note")) {
+      setTimeout(() => { window.location.href = "/admin"; }, 1200);
+    }
   } catch (error) {
     showError("password-error", error.message || "Could not change the password.");
   } finally {

@@ -23,7 +23,9 @@ form.addEventListener("submit", async (event) => {
     });
 
     if (response.ok) {
-      window.location.href = "/admin";
+      const data = await response.json();
+      // A temporary password (first login) is changed on the Settings page first.
+      window.location.href = data.must_change_password ? "/admin/settings" : "/admin";
       return;
     }
     showError("login-error", await errorText(response));

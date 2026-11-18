@@ -23,7 +23,8 @@ def api_login():
     session.clear()
     session.permanent = True
     session["admin"] = True
-    return jsonify(ok=True)
+    # login.js opens Settings instead of the items when the password must be changed first.
+    return jsonify(ok=True, must_change_password=AuthService(get_db()).must_change_password())
 
 
 @bp.post("/api/logout")

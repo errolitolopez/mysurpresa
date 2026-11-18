@@ -40,7 +40,8 @@ def item_page(item_id):
 @bp.get("/admin/settings")
 @admin_page
 def settings_page():
-    return render_template("admin_settings.html")
+    return render_template("admin_settings.html",
+                           must_change_password=AuthService(get_db()).must_change_password())
 
 
 # --- items ---
