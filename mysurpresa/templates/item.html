@@ -104,7 +104,7 @@
           {# The photo on screen with the name and price, ready to post. item.js follows the carousel. #}
           <a class="btn btn-outline-secondary bi bi-download" id="download-button" download
              data-base-url="{{ url_for('shop.download', item_id=item.id) }}"
-             href="{{ url_for('shop.download', item_id=item.id, photo=photos[0].id) }}">Download picture with price</a>
+             href="{{ url_for('shop.download', item_id=item.id, photo=photos[0].id) }}">Download</a>
         {% endif %}
       </div>
     </div>
