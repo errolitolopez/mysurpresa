@@ -1,0 +1,3 @@
+flask==3.1.3
+# Photos: check, turn upright, shrink and remove the hidden location data
+pillow==13.0.0

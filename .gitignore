@@ -1,0 +1,13 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Private data: database, secret key and uploaded photos
+instance/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+.pytest_cache/
