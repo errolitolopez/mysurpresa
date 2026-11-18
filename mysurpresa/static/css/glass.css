@@ -642,11 +642,7 @@ html[data-style="neu"] .card.shadow-sm { box-shadow: var(--neu-raised) !importan
   color: transparent;
 }
 
-/* The navbar: the round logo, and the shop name in the logo's dark red and its heavy font */
-.navbar-logo {
-  width: 40px;
-  height: 40px;
-}
+/* The navbar: the shop name in the logo's dark red and its heavy font */
 .brand-name {
   color: var(--brand-name);
   font-weight: 800;
