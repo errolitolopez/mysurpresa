@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Settings · MySurpresa admin{% endblock %}
+
+{% block content %}
+{% include "_admin_navbar.html" %}
+
+<main class="container py-3" style="max-width: 720px">
+  <section class="card mb-3" aria-labelledby="shop-title">
+    <div class="card-header d-flex justify-content-between align-items-center gap-2">
+      <span class="fw-semibold bi bi-shop" id="shop-title"> Shop</span>
+    </div>
+    <form class="card-body" id="shop-form" novalidate>
+      <div class="mb-3">
+        <label class="form-label" for="shop-name">Shop name</label>
+        <input class="form-control" id="shop-name" maxlength="60" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="tagline">Tagline</label>
+        <input class="form-control" id="tagline" maxlength="140">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="messenger">Messenger username</label>
+        <div class="input-group">
+          <span class="input-group-text">m.me/</span>
+          <input class="form-control" id="messenger" maxlength="80" placeholder="your.page.name"
+                 autocapitalize="off" autocorrect="off" spellcheck="false">
+        </div>
+        <div class="form-text">
+          Buyers tap "Message to buy" and Messenger opens a chat with this account, with the item already written in.
+          Find it in Messenger: your profile picture, then the link under your name. You can paste the whole link.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="facebook">Facebook page link (optional)</label>
+        <input class="form-control" id="facebook" type="url" maxlength="200" placeholder="https://facebook.com/your.page">
+      </div>
+      <div id="shop-error" class="alert alert-danger py-2 d-none" role="alert"></div>
+      <div id="shop-saved" class="alert alert-success py-2 d-none" role="status">Saved.</div>
+      <button type="submit" class="btn btn-primary bi bi-check-lg" id="shop-save">Save</button>
+    </form>
+  </section>
+
+  <section class="card mb-3" aria-labelledby="password-title">
+    <div class="card-header d-flex justify-content-between align-items-center gap-2">
+      <span class="fw-semibold bi bi-key" id="password-title"> Password</span>
+    </div>
+    <form class="card-body" id="password-form" novalidate>
+      {# Hidden username so password managers know which login this is #}
+      <input type="text" autocomplete="username" value="admin" class="d-none" aria-hidden="true" tabindex="-1">
+      <div class="mb-3">
+        <label class="form-label" for="current-password">Current password</label>
+        <input class="form-control" id="current-password" type="password" autocomplete="current-password" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="new-password">New password</label>
+        <input class="form-control" id="new-password" type="password" autocomplete="new-password" minlength="8" required>
+        <div class="form-text">At least 8 characters. A short sentence is easy to remember and hard to guess.</div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="confirm-password">New password again</label>
+        <input class="form-control" id="confirm-password" type="password" autocomplete="new-password" required>
+      </div>
+      <div id="password-error" class="alert alert-danger py-2 d-none" role="alert"></div>
+      <div id="password-saved" class="alert alert-success py-2 d-none" role="status">Password changed.</div>
+      <button type="submit" class="btn btn-primary bi bi-check-lg" id="password-save">Change password</button>
+    </form>
+  </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin_settings.js') }}"></script>
+{% endblock %}
