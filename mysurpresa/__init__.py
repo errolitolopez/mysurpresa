@@ -13,7 +13,7 @@ Layers (each only uses the ones below it):
 from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from mysurpresa import cli, config, database
+from mysurpresa import cli, config, database, seed
 from mysurpresa.domain.money import peso
 from mysurpresa.errors import register_error_handlers
 from mysurpresa.services import LoginThrottle
@@ -30,6 +30,7 @@ def create_app(test_config=None):
 
     database.init_app(app)
     app.cli.add_command(cli.set_password_command)
+    app.cli.add_command(seed.seed_command)
     app.extensions["login_throttle"] = LoginThrottle()
 
     register_error_handlers(app)
