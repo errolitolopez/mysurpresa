@@ -19,9 +19,7 @@
 
 <main class="container py-3">
   <header class="text-center my-3">
-    {# The logo is the same picture as the Facebook Page's profile photo (branding/). It already says
-       the name, so the heading is there for screen readers and search engines only. #}
-    <img class="shop-logo rounded-circle mb-2" src="{{ url_for('static', filename='img/logo-480.png') }}" alt="">
+    {# The navbar already shows the name, so the heading is for screen readers and search engines only. #}
     <h1 class="visually-hidden">{{ shop.shop_name }}</h1>
     {% if shop.tagline %}<p class="text-body-secondary mb-0">{{ shop.tagline }}</p>{% endif %}
   </header>
