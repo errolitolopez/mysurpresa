@@ -78,22 +78,20 @@
       {% endif %}
 
       <div class="d-grid gap-2">
-        {% if item.status == 'sold' %}
-          <button class="btn btn-secondary btn-lg bi bi-bag-x" disabled>Sold</button>
-        {% elif shop.messenger_username %}
-          <a class="btn btn-primary btn-lg bi bi-messenger" target="_blank" rel="noopener"
-             href="https://m.me/{{ shop.messenger_username }}?text={{ message|urlencode }}">
-            {{ 'Ask if still available' if item.status == 'reserved' else 'Message to buy' }}
-          </a>
-        {% elif session.get('admin') %}
+        {% if not shop.messenger_username and session.get('admin') %}
           <div class="alert alert-info py-2 mb-0">
             Set your Messenger username in <a href="{{ url_for('admin.settings_page') }}">Settings</a>
-            to show the "Message to buy" button here.
+            to show the "Message us" link here.
           </div>
         {% endif %}
 
-        {# Share, Facebook and Download look like links, so "Message to buy" is the one button on the page. #}
+        {# Every action looks like a link: Message us, Share, Facebook, Download. #}
         <div class="d-flex justify-content-center flex-wrap gap-3">
+          {# A sold item can't be bought, so there is nothing to ask. #}
+          {% if shop.messenger_username and item.status != 'sold' %}
+            <a class="btn btn-link px-0 bi bi-messenger" target="_blank" rel="noopener"
+               href="https://m.me/{{ shop.messenger_username }}?text={{ message|urlencode }}">Message us</a>
+          {% endif %}
           {# "Share" opens the phone's share sheet; where there is none (most computers)
              item.js turns it into "Copy link". #}
           <button type="button" class="btn btn-link px-0 bi bi-share" id="share-button"

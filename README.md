@@ -12,7 +12,7 @@ Built with Python (Flask), SQLite, Pillow, vanilla JavaScript and Bootstrap 5.
 - Item grid: photo, name, price, status (Available / Reserved / Sold). Available first, sold
   items stay visible but faded. "All" / "Available" filter
 - Item page: photo carousel, price, description
-- **Message to buy**: opens Messenger (`m.me/<username>`) with the item name, price and link
+- **Message us**: opens Messenger (`m.me/<username>`) with the item name, price and link
   already written in
 - **Share** (phone share sheet: Messenger, Facebook, Viber...), **Facebook** (share dialog),
   **Copy link**
