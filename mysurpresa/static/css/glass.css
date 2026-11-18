@@ -649,6 +649,13 @@ html[data-style="neu"] .card.shadow-sm { box-shadow: var(--neu-raised) !importan
   vertical-align: -0.4em;
 }
 
+/* The round logo (the Facebook Page's profile photo) at the top of the shop and on the login page */
+.shop-logo {
+  width: 140px;
+  height: 140px;
+  box-shadow: var(--glass-shadow);
+}
+
 /* Item photos are square tiles in the list, so the grid lines up whatever the photo shape */
 .item-photo {
   aspect-ratio: 1 / 1;

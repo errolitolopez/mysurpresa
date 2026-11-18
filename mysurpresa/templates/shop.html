@@ -8,9 +8,10 @@
 <meta property="og:title" content="{{ shop.shop_name }}">
 <meta property="og:description" content="{{ shop.tagline }}">
 <meta property="og:url" content="{{ url_for('shop.index', _external=True) }}">
-{% if items and items[0].cover %}
-<meta property="og:image" content="{{ url_for('shop.photo', filename=items[0].cover ~ '.jpg', _external=True) }}">
-{% endif %}
+{# A shared link to the shop shows the logo (an item's own page shows that item's photo). #}
+<meta property="og:image" content="{{ url_for('static', filename='img/logo.png', _external=True) }}">
+<meta property="og:image:width" content="1080">
+<meta property="og:image:height" content="1080">
 {% endblock %}
 
 {% block content %}
@@ -18,7 +19,10 @@
 
 <main class="container py-3">
   <header class="text-center my-3">
-    <h1 class="h3 fw-bold mb-1">{{ shop.shop_name }}</h1>
+    {# The logo is the same picture as the Facebook Page's profile photo (branding/). It already says
+       the name, so the heading is there for screen readers and search engines only. #}
+    <img class="shop-logo rounded-circle mb-2" src="{{ url_for('static', filename='img/logo-480.png') }}" alt="">
+    <h1 class="visually-hidden">{{ shop.shop_name }}</h1>
     {% if shop.tagline %}<p class="text-body-secondary mb-0">{{ shop.tagline }}</p>{% endif %}
   </header>
 
