@@ -4,8 +4,7 @@
           aria-expanded="false" aria-label="Change theme" title="Change theme"></button>
   <ul class="dropdown-menu dropdown-menu-end">
     <li><h6 class="dropdown-header">Theme</h6></li>
-    {% for value, label in (("auto", "Auto"), ("light", "Light"), ("dark", "Dark"), ("darcula", "Darcula"),
-                            ("solarized", "Solarized"), ("neon", "Neon")) %}
+    {% for value, label in (("auto", "Auto"), ("light", "Light"), ("dark", "Dark")) %}
     <li><button class="dropdown-item" type="button" data-theme-choice="{{ value }}">{{ label }}</button></li>
     {% endfor %}
   </ul>

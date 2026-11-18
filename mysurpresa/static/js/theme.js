@@ -1,13 +1,10 @@
 // Colour theme (copied from myguro). Loaded in <head> so the theme is set before the page is drawn (no flash).
 // "auto" follows the device; a person's choice is kept in this browser only.
-// Every theme is built on Bootstrap's light or dark mode (data-bs-theme); the named themes
-// (Darcula, Solarized, Neon) then change the colours on top of it (data-mysurpresa-theme, see glass.css).
+// Only Bootstrap's light and dark mode (data-bs-theme); myguro's named themes are left out.
 
 (function () {
   const KEY = "mysurpresa-theme";
-  const CHOICES = ["auto", "light", "dark", "darcula", "solarized", "neon"];
-  // Which Bootstrap mode each named theme starts from.
-  const BASE = { light: "light", dark: "dark", darcula: "dark", solarized: "light", neon: "dark" };
+  const CHOICES = ["auto", "light", "dark"];
   const dark = window.matchMedia("(prefers-color-scheme: dark)");
 
   function saved() {
@@ -21,8 +18,7 @@
 
   function apply(choice) {
     const theme = choice === "auto" ? (dark.matches ? "dark" : "light") : choice;
-    document.documentElement.setAttribute("data-bs-theme", BASE[theme]);
-    document.documentElement.setAttribute("data-mysurpresa-theme", theme);
+    document.documentElement.setAttribute("data-bs-theme", theme);
   }
 
   // No colour animation while the first theme is applied (removed once the page has loaded).
