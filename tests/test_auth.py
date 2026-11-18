@@ -114,3 +114,15 @@ def test_new_database_has_admin_password_to_change(anonymous):
     assert response.status_code == 200
     assert response.get_json()["must_change_password"] is True
     assert anonymous.get("/admin").headers["Location"].endswith("/admin/settings")
+
+
+def test_http_goes_to_https_when_the_cookie_is_https_only(anonymous):
+    from conftest import flask_app
+    flask_app.config["SESSION_COOKIE_SECURE"] = True
+    try:
+        response = anonymous.get("/login")
+        assert response.status_code == 301
+        assert response.headers["Location"] == "https://localhost/login"
+        assert anonymous.get("/login", base_url="https://localhost").status_code == 200
+    finally:
+        flask_app.config["SESSION_COOKIE_SECURE"] = False

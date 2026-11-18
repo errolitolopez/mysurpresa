@@ -12,7 +12,7 @@ Layers (each only uses the ones below it):
 
 import os
 
-from flask import Flask
+from flask import Flask, redirect, request
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from mysurpresa import cli, config, database, seed
@@ -45,6 +45,13 @@ def create_app(test_config=None):
 
     # {{ item.price|peso }} -> "₱1,250" in templates
     app.add_template_filter(peso, "peso")
+
+    @app.before_request
+    def force_https():
+        """Online the login cookie only goes over https (MYSURPRESA_HTTPS=1), so on http:// logging in
+        would silently fail: send http:// visitors to the same page on https:// first."""
+        if app.config["SESSION_COOKIE_SECURE"] and not request.is_secure:
+            return redirect(request.url.replace("http://", "https://", 1), code=301)
 
     @app.after_request
     def security_headers(response):
