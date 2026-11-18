@@ -1,9 +1,8 @@
-// Item page: full screen photos, and the Share and Copy link buttons. (Facebook and Messenger are plain links.)
+// Item page: full screen photos, the Share button and the Download button. (Facebook and Messenger are plain links.)
 
 const shareButton = document.getElementById("share-button");
-const copyButton = document.getElementById("copy-button");
 
-// showDone(copyButton, "Copied!") -> the button says "Copied!" for 2 seconds
+// showDone(shareButton, "Copied!") -> the button says "Copied!" for 2 seconds
 const showDone = (button, text) => {
   const original = button.textContent;
   button.textContent = text;
@@ -22,8 +21,13 @@ const copyLink = async (url) => {
   }
 };
 
-// On phones, navigator.share opens the share sheet: Messenger, Facebook, Viber, SMS...
-// Computers without it copy the link instead.
+// On phones, navigator.share opens the share sheet: Messenger, Facebook, Viber, SMS, and Copy.
+// Without it (most computers) the same button copies the link, so it says so.
+if (!navigator.share) {
+  shareButton.textContent = "Copy link";
+  shareButton.classList.replace("bi-share", "bi-link-45deg");
+}
+
 shareButton.addEventListener("click", async () => {
   const { url, title } = shareButton.dataset;
   if (navigator.share) {
@@ -34,11 +38,7 @@ shareButton.addEventListener("click", async () => {
     }
     return;
   }
-  if (await copyLink(url)) showDone(shareButton, "Link copied!");
-});
-
-copyButton.addEventListener("click", async () => {
-  if (await copyLink(copyButton.dataset.url)) showDone(copyButton, "Copied!");
+  if (await copyLink(url)) showDone(shareButton, "Copied!");
 });
 
 // --- Full screen photos (like mytee's full screen button) ---
