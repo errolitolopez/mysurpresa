@@ -43,6 +43,8 @@
   --glass-solid: #fff;
   --navbar-bg: rgba(255, 255, 255, 0.7);
   --page-base: #f3f4f6;
+  --viewer-bg: #000; /* full screen photos: black around them, like a phone's gallery app */
+  --viewer-button-bg: rgba(255, 255, 255, 0.85);
   --page-gradient: radial-gradient(circle at top left, hsl(220 13% 95%), hsl(220 13% 91%));
   --scroll-thumb: rgba(100, 116, 139, 0.5);
   /* Links use the text colour (underlined), like the navbar tabs, not Bootstrap's blue. Bootstrap
@@ -665,7 +667,45 @@ html[data-style="neu"] .card.shadow-sm { box-shadow: var(--neu-raised) !importan
   max-height: 70vh;
   object-fit: contain;
   background: rgba(var(--confirm-rgb), 0.08);
+  cursor: zoom-in;
 }
+
+/* The full screen button sits on the photo's top right corner, above the carousel's arrows. */
+.viewer-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 3;
+  --bs-btn-bg: var(--viewer-button-bg);
+  --bs-btn-hover-bg: var(--viewer-button-bg);
+}
+
+/* Full screen: the photos fill the screen on black, whole (never cropped).
+   :fullscreen is the browser's real full screen (Android, computers). .is-fullscreen is the same look for
+   browsers that can't make a part of the page full screen (iPhone Safari): it covers the page instead. */
+.item-gallery:fullscreen,
+.item-gallery.is-fullscreen {
+  background: var(--viewer-bg);
+  display: flex;
+  align-items: center;
+}
+.item-gallery.is-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 2000; /* above the sticky navbar (1020) and Bootstrap's modals (1055) */
+}
+.item-gallery:fullscreen img,
+.item-gallery.is-fullscreen img {
+  height: 100vh;
+  height: 100dvh; /* the visible height, so the photo is not hidden under the phone's browser bar */
+  max-height: none;
+  background: var(--viewer-bg);
+  cursor: zoom-out;
+}
+.item-gallery:fullscreen .carousel-inner,
+.item-gallery.is-fullscreen .carousel-inner { width: 100%; }
+/* The page behind the cover-the-page full screen does not scroll */
+body:has(.item-gallery.is-fullscreen) { overflow: hidden; }
 
 /* Small square photo in the admin rows */
 .thumb-sm {

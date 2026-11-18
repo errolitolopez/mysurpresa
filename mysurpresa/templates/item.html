@@ -28,7 +28,12 @@
 
   <article class="card overflow-hidden {{ 'is-sold' if item.status == 'sold' }}">
     {% if photos %}
-      <div id="gallery" class="carousel slide item-gallery" aria-label="Photos of {{ item.name }}">
+      <div id="gallery" class="carousel slide item-gallery position-relative" aria-label="Photos of {{ item.name }}">
+        {# Full screen, like mytee's: a round icon button over the photo. Tapping the photo does the same. #}
+        <button id="fullscreen-toggle" type="button" class="btn btn-sm rounded-pill px-3 viewer-button"
+                aria-label="Full screen" title="Full screen">
+          <i class="bi bi-arrows-fullscreen" aria-hidden="true"></i>
+        </button>
         {% if photos|length > 1 %}
           <div class="carousel-indicators">
             {% for photo in photos %}
@@ -108,5 +113,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/share.js') }}"></script>
+<script src="{{ url_for('static', filename='js/item.js') }}"></script>
 {% endblock %}

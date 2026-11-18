@@ -59,3 +59,11 @@ def test_unknown_item_shows_friendly_page(anonymous):
     response = anonymous.get("/item/999")
     assert response.status_code == 404
     assert "no longer here" in response.get_data(as_text=True)
+
+
+def test_item_with_photos_has_full_screen_button(client, anonymous):
+    item = add_item(client)
+    assert 'id="fullscreen-toggle"' not in anonymous.get(f"/item/{item['id']}").get_data(as_text=True)
+    upload_photo(client, item["id"])
+    page = anonymous.get(f"/item/{item['id']}").get_data(as_text=True)
+    assert 'id="fullscreen-toggle"' in page and "js/item.js" in page
