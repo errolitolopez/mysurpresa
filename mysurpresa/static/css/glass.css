@@ -642,6 +642,14 @@ html[data-style="neu"] .card.shadow-sm { box-shadow: var(--neu-raised) !importan
   color: transparent;
 }
 
+/* The app icon (the open mystery box, the same as favicon.svg) next to the shop name: a little
+   taller than the text, sitting on its baseline */
+.app-icon {
+  height: 1.6em;
+  width: 1.6em;
+  vertical-align: -0.4em;
+}
+
 /* The navbar: the shop name in the logo's dark red and its heavy font */
 .brand-name {
   color: var(--brand-name);
