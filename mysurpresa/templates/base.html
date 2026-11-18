@@ -8,10 +8,10 @@
   <title>{% block title %}MySurpresa{% endblock %}</title>
   {# Link previews on Facebook and Messenger read these og: tags (title, photo, text). #}
   {% block head %}{% endblock %}
-  {# The tab icon: the open mystery box (the same as in the navbar). iPhone home screens use the
-     round version on the pink circle (branding/profile-photo.png). #}
-  <link rel="icon" href="{{ url_for('static', filename='favicon.svg', v=9) }}" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png', v=8) }}">
+  {# The tab and home screen icon: the round logo with the name (branding/profile-photo-with-name.png) #}
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon-32.png', v=10) }}" type="image/png" sizes="32x32">
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon-192.png', v=10) }}" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png', v=10) }}">
   <meta name="theme-color" content="#4f46e5">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
