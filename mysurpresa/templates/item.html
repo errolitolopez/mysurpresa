@@ -92,20 +92,21 @@
           </div>
         {% endif %}
 
-        <div class="d-flex gap-2">
-          {# One button: "Share" opens the phone's share sheet; where there is none (most computers)
+        {# Share, Facebook and Download look like links, so "Message to buy" is the one button on the page. #}
+        <div class="d-flex justify-content-center flex-wrap gap-3">
+          {# "Share" opens the phone's share sheet; where there is none (most computers)
              item.js turns it into "Copy link". #}
-          <button type="button" class="btn btn-outline-secondary flex-fill bi bi-share" id="share-button"
+          <button type="button" class="btn btn-link px-0 bi bi-share" id="share-button"
                   data-url="{{ item_url }}" data-title="{{ item.name }} · {{ item.price|peso }}">Share</button>
-          <a class="btn btn-outline-secondary flex-fill bi bi-facebook" target="_blank" rel="noopener"
+          <a class="btn btn-link px-0 bi bi-facebook" target="_blank" rel="noopener"
              href="https://www.facebook.com/sharer/sharer.php?u={{ item_url|urlencode }}">Facebook</a>
+          {% if photos %}
+            {# The photo on screen with the name and price, ready to post. item.js follows the carousel. #}
+            <a class="btn btn-link px-0 bi bi-download" id="download-button" download
+               data-base-url="{{ url_for('shop.download', item_id=item.id) }}"
+               href="{{ url_for('shop.download', item_id=item.id, photo=photos[0].id) }}">Download</a>
+          {% endif %}
         </div>
-        {% if photos %}
-          {# The photo on screen with the name and price, ready to post. item.js follows the carousel. #}
-          <a class="btn btn-outline-secondary bi bi-download" id="download-button" download
-             data-base-url="{{ url_for('shop.download', item_id=item.id) }}"
-             href="{{ url_for('shop.download', item_id=item.id, photo=photos[0].id) }}">Download</a>
-        {% endif %}
       </div>
     </div>
   </article>
