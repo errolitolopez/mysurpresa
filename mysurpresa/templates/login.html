@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Login · MySurpresa{% endblock %}
+
+{% block content %}
+<main class="container d-flex align-items-center justify-content-center flex-grow-1">
+  <div class="card shadow-sm col-10 col-sm-8 col-md-5 col-lg-4">
+    <div class="card-body p-4">
+      <h1 class="h4 text-center mb-1"><span class="bi bi-gift-fill text-brand me-1" aria-hidden="true"></span>MySurpresa</h1>
+      <p class="text-center text-body-secondary mb-4">Admin login</p>
+
+      <form id="login-form" novalidate>
+        <input id="password" type="password" class="form-control form-control-lg mb-3"
+               autocomplete="current-password" placeholder="Password" aria-label="Password" required autofocus>
+        <div id="login-error" class="alert alert-danger py-2 d-none" role="alert"></div>
+        <button id="login-button" type="submit" class="btn btn-primary btn-lg w-100 bi bi-box-arrow-in-right">Login</button>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/common.js') }}"></script>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}
