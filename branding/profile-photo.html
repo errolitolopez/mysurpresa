@@ -1,0 +1,22 @@
+<!doctype html>
+<!-- Facebook Page profile photo, 1080 x 1080. Facebook shows it as a circle, so everything stays
+     inside the middle circle. Render with: ./render.sh -->
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@800&display=block" rel="stylesheet">
+<style>
+  html, body { margin: 0; width: 1080px; height: 1080px; }
+  body {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 40%, #ffffff 0%, #fdecee 70%, #f8d7da 100%);
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+  img { width: 720px; height: 720px; }
+  body.with-name img { width: 580px; height: 580px; margin-top: -50px; }
+  .name { display: none; font-weight: 800; font-size: 104px; letter-spacing: -2px; color: #b02a37; margin-top: 4px; }
+  body.with-name .name { display: block; }
+</style></head>
+<body>
+  <img src="icon.svg" alt="">
+  <div class="name">MySurpresa</div>
+  <script>if (location.hash === "#name") document.body.classList.add("with-name");</script>
+</body></html>
