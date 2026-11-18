@@ -50,12 +50,15 @@ Requires Python 3.10+.
 ./run.sh phone    # also open it from a phone on the same Wi-Fi
 ```
 
-The first run creates the virtual environment, installs Flask and Pillow, creates the database
-and asks for the admin password (at least 8 characters). Then open `/login`.
+The first run creates the virtual environment and installs Flask and Pillow. The database is
+created when the app starts. Log in at `/login` with the password **`admin`**: the app then opens
+Settings and asks for your own password (at least 8 characters) before anything else.
 
-Try it with 3 sample items with real photos: `.venv/bin/flask --app app seed` (only on an empty shop; photo credits in `mysurpresa/sample_photos/CREDITS.md`).
+Try it with 3 sample items with real photos: `.venv/bin/flask --app app seed` (only on an empty shop;
+photo credits in `mysurpresa/sample_photos/CREDITS.md`).
 
-Change the password later on the Settings page, or with `.venv/bin/flask --app app set-password`.
+Change the password later on the Settings page. Locked out? `.venv/bin/flask --app app set-password --temporary`
+sets a new one that must be changed again after logging in.
 
 ## Files
 
@@ -70,22 +73,23 @@ Back up `instance/` to keep the items and photos.
 
 ## Put it online (PythonAnywhere)
 
-1. Upload the code: `git clone <repo> ~/mysurpresa` in a Bash console.
-2. Install: `cd ~/mysurpresa && pip3.12 install --user -r requirements.txt`
-   (use the same Python version as the web app).
-3. `flask --app app init-db` and `flask --app app set-password`.
-4. Web tab → Add a new web app → Manual configuration → same Python version. In the WSGI file:
+Live at https://mysurpresa.pythonanywhere.com (PythonAnywhere user `mysurpresa`). Full steps, updates
+and pitfalls: `docs/mysurpresa/hosting.md` in the workspace (same setup as myguro).
 
-   ```python
-   import os, sys
-   os.environ["MYSURPRESA_HTTPS"] = "1"   # login cookie only over https
-   sys.path.insert(0, "/home/<username>/mysurpresa")
-   from app import app as application
-   ```
+Short version: clone into `~/mysurpresa`, make the venv `~/mysurpresa-venv`, Web tab → Manual
+configuration, and in the WSGI file:
 
-5. Web tab → turn on **Force HTTPS**, then Reload.
+```python
+import os
+import sys
+sys.path.insert(0, "/home/mysurpresa/mysurpresa")
+os.environ["MYSURPRESA_TRUST_PROXY"] = "1"  # behind PythonAnywhere's proxy: real https and visitor address
+os.environ["MYSURPRESA_HTTPS"] = "1"        # the login cookie only over https
+from mysurpresa import create_app
+application = create_app()
+```
 
-Note: a free PythonAnywhere account has only **one** web app.
+Reload, then log in with `admin` and choose your own password.
 
 ## Tests
 
