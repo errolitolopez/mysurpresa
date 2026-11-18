@@ -45,7 +45,7 @@
         {% endif %}
         <div class="carousel-inner">
           {% for photo in photos %}
-            <div class="carousel-item {{ 'active' if loop.first }}">
+            <div class="carousel-item {{ 'active' if loop.first }}" data-photo-id="{{ photo.id }}">
               <img class="d-block w-100" alt="{{ item.name }}, photo {{ loop.index }}"
                    {% if not loop.first %}loading="lazy"{% endif %}
                    src="{{ url_for('shop.photo', filename=photo.filename ~ '.jpg') }}">
@@ -100,6 +100,12 @@
           <button type="button" class="btn btn-outline-secondary flex-fill bi bi-link-45deg" id="copy-button"
                   data-url="{{ item_url }}">Copy link</button>
         </div>
+        {% if photos %}
+          {# The photo on screen with the name and price, ready to post. item.js follows the carousel. #}
+          <a class="btn btn-outline-secondary bi bi-download" id="download-button" download
+             data-base-url="{{ url_for('shop.download', item_id=item.id) }}"
+             href="{{ url_for('shop.download', item_id=item.id, photo=photos[0].id) }}">Download picture with price</a>
+        {% endif %}
       </div>
     </div>
   </article>

@@ -3,8 +3,12 @@
 from mysurpresa.domain.items import (
     PUBLIC_STATUSES, STATUSES, clean_description, clean_item_name, clean_status,
 )
-from mysurpresa.domain.money import clean_price
-from mysurpresa.domain.photos import delete_photo_files
+import re
+
+from mysurpresa.domain.money import clean_price, peso
+from mysurpresa.domain.photo_card import make_photo_card
+from mysurpresa.domain.photos import delete_photo_files, photo_paths
+from mysurpresa.domain.shop import DEFAULTS
 from mysurpresa.errors import NotFoundError, ValidationError
 from mysurpresa.services.base import Service
 
@@ -27,6 +31,22 @@ class ItemService(Service):
         if item is None or (item["status"] == "draft" and not is_admin):
             raise NotFoundError("Item not found.")
         return item
+
+    def photo_card(self, item_id, photo_id=None, is_admin=False):
+        """(JPEG bytes, file name) of the item's picture to download: the photo (the cover, or
+        photo_id) with the name and price. Raises NotFoundError for a hidden item, an item with
+        no photos, or a photo of another item."""
+        item = self.shop_get(item_id, is_admin)
+        photos = self.photos.list_for_item(item_id)
+        if photo_id is not None:
+            photos = [photo for photo in photos if photo["id"] == photo_id]
+        if not photos:
+            raise NotFoundError("Photo not found.")
+        path, _ = photo_paths(self.photo_dir, photos[0]["filename"])
+        shop_name = self.settings.get("shop_name") or DEFAULTS["shop_name"]
+        status = item["status"] if item["status"] in ("reserved", "sold") else None
+        data = make_photo_card(path, item["name"], peso(item["price"]), shop_name, status)
+        return data, f"{download_name(item['name'])}.jpg"
 
     # --- admin ---
 
@@ -91,3 +111,8 @@ class ItemService(Service):
             clean_price(data.get("price")),
             clean_status(data.get("status") or "draft"),
         )
+
+
+def download_name(name):
+    """download_name("Running shoes, size 9") -> "running-shoes-size-9" (safe as a file name)."""
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")[:60] or "item"

@@ -82,7 +82,14 @@ const closeFullscreen = () => {
   showFullscreenButton(false);
 };
 
+// The Download button saves the photo that is on screen: follow the carousel when it changes photo.
+const downloadButton = document.getElementById("download-button");
+
 if (gallery) {
+  gallery.addEventListener("slid.bs.carousel", (event) => {
+    const photoId = event.relatedTarget.dataset.photoId;
+    downloadButton.href = `${downloadButton.dataset.baseUrl}?photo=${photoId}`;
+  });
   fullscreenButton.addEventListener("click", () => (isFullscreen() ? closeFullscreen() : openFullscreen()));
   // Tapping the photo itself opens or closes it too. A swipe to the next photo is not a tap (no click).
   gallery.querySelectorAll(".carousel-item img").forEach((image) => {

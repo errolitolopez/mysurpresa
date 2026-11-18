@@ -67,3 +67,35 @@ def test_item_with_photos_has_full_screen_button(client, anonymous):
     upload_photo(client, item["id"])
     page = anonymous.get(f"/item/{item['id']}").get_data(as_text=True)
     assert 'id="fullscreen-toggle"' in page and "js/item.js" in page
+
+
+def test_download_picture_with_name_and_price(client, anonymous):
+    import io
+
+    from PIL import Image
+
+    item = add_item(client, name="Running shoes, size 9", status="sold")
+    first = upload_photo(client, item["id"]).get_json()["photo"]
+    second = upload_photo(client, item["id"]).get_json()["photo"]
+    page = anonymous.get(f"/item/{item['id']}").get_data(as_text=True)
+    assert f"/item/{item['id']}/download?photo={first['id']}" in page
+
+    for query in ("", f"?photo={second['id']}"):
+        response = anonymous.get(f"/item/{item['id']}/download{query}")
+        assert response.status_code == 200
+        assert response.mimetype == "image/jpeg"
+        assert 'filename=running-shoes-size-9.jpg' in response.headers["Content-Disposition"]
+        with Image.open(io.BytesIO(response.data)) as image:
+            assert image.size == (1080, 1350)
+
+
+def test_download_is_not_found_for_drafts_and_other_photos(client, anonymous):
+    draft = add_item(client, status="draft")
+    upload_photo(client, draft["id"])
+    other = add_item(client)
+    other_photo = upload_photo(client, other["id"]).get_json()["photo"]
+    no_photos = add_item(client)
+    assert anonymous.get(f"/item/{draft['id']}/download").status_code == 404
+    assert client.get(f"/item/{draft['id']}/download").status_code == 200  # the admin's preview
+    assert anonymous.get(f"/item/{no_photos['id']}/download").status_code == 404
+    assert anonymous.get(f"/item/{no_photos['id']}/download?photo={other_photo['id']}").status_code == 404

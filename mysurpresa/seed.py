@@ -15,9 +15,9 @@ from PIL import Image, ImageDraw, ImageFont
 from werkzeug.datastructures import FileStorage
 
 from mysurpresa.database import get_db
+from mysurpresa.domain.photo_card import BOLD
 from mysurpresa.services import ItemService, ParcelService, PhotoService
 
-FONT_PATHS = ["/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "DejaVuSans-Bold.ttf"]
 
 # (name, cost in pesos, day bought, note)
 PARCELS = [
@@ -49,12 +49,7 @@ ITEMS = [
 
 
 def font(size):
-    for path in FONT_PATHS:
-        try:
-            return ImageFont.truetype(path, size)
-        except OSError:
-            continue
-    return ImageFont.load_default(size)
+    return ImageFont.truetype(BOLD, size)  # the font bundled in mysurpresa/fonts
 
 
 def placeholder_photo(name, colour, number):

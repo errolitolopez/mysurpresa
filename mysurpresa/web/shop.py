@@ -1,8 +1,11 @@
 """The public shop: the item list, an item's page, and the photo files. No login needed."""
 
+import io
 import re
 
-from flask import Blueprint, abort, current_app, render_template, request, send_from_directory
+from flask import (
+    Blueprint, abort, current_app, render_template, request, send_file, send_from_directory,
+)
 
 from mysurpresa.database import get_db
 from mysurpresa.errors import NotFoundError
@@ -39,6 +42,18 @@ def item_page(item_id):
     photos = PhotoService(get_db(), current_app.config["PHOTO_DIR"]).list(item_id)
     return render_template("item.html", shop=ShopService(get_db()).get(), item=item,
                            photos=photos)
+
+
+@bp.get("/item/<int:item_id>/download")
+def download(item_id):
+    """The item's picture with its name and price, as a file to save (?photo=<id> picks the photo)."""
+    try:
+        data, filename = items_service().photo_card(
+            item_id, request.args.get("photo", type=int), is_admin=is_admin())
+    except NotFoundError:
+        abort(404)
+    return send_file(io.BytesIO(data), mimetype="image/jpeg", as_attachment=True,
+                     download_name=filename)
 
 
 @bp.get("/photos/<filename>")
